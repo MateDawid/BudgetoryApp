@@ -45,6 +45,7 @@ export default function BaseCategoryModal({
       label: 'Type',
       required: true,
       options: typeOptions,
+      disabled: editedCategory,
     },
     priority: {
       type: 'select',
