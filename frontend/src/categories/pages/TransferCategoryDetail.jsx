@@ -192,6 +192,7 @@ export default function TransferCategoryDetail() {
             fullWidth
             onSave={onSave}
             required
+            disabled
             type="select"
             options={depositOptions}
             select
