@@ -65,10 +65,12 @@ const PeriodFilterField = ({
         setPeriodStatus(periodOptions[0].status);
         setPeriodStatusLabel(periodOptions[0].status_display);
         localStorage.setItem('budgetory.periodFilter', periodOptions[0].id);
+        document.title = 'Predictions';
       } else {
         setPeriodFilter(null);
         setPeriodStatus(0);
         setPeriodStatusLabel(null);
+        document.title = 'Predictions';
       }
     };
     if (!contextWalletId) {

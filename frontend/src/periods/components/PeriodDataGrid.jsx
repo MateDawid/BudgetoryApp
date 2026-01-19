@@ -229,7 +229,6 @@ const PeriodDataGrid = () => {
         setLoading(false);
       }
     };
-    console.log(contextWalletId);
     if (!contextWalletId) {
       navigate('/wallets');
       setAlert({

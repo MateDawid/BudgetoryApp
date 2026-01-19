@@ -38,6 +38,7 @@ export default function BaseCategoryModal({
       label: 'Deposit',
       required: true,
       options: depositOptions,
+      disabled: editedCategory,
     },
     category_type: {
       type: 'select',
@@ -45,6 +46,7 @@ export default function BaseCategoryModal({
       label: 'Type',
       required: true,
       options: typeOptions,
+      disabled: editedCategory,
     },
     priority: {
       type: 'select',

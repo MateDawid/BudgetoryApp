@@ -27,8 +27,8 @@ const UNCATEGORIZED_PRIORITY = -1;
 const baseOrderingOptions = [
   { value: 'category__name', label: 'Category name ↗' },
   { value: '-category__name', label: 'Category name ↘' },
-  { value: 'category__priority', label: 'Category priority ↗' },
-  { value: '-category__priority', label: 'Category priority ↘' },
+  { value: 'category__priority', label: 'Category priority ↘' },
+  { value: '-category__priority', label: 'Category priority ↗' },
   { value: 'current_plan', label: 'Current plan ↗' },
   { value: '-current_plan', label: 'Current plan ↘' },
   { value: 'current_result', label: 'Current result ↗' },
@@ -74,7 +74,7 @@ export default function ExpensePredictionsPage() {
   const [priorityFilter, setPriorityFilter] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [progressStatusFilter, setProgressStatusFilter] = useState(null);
-  const [orderingFilter, setOrderingFilter] = useState(null);
+  const [orderingFilter, setOrderingFilter] = useState('category__priority');
 
   // Data
   const [periodStatus, setPeriodStatus] = useState(0);
@@ -91,7 +91,7 @@ export default function ExpensePredictionsPage() {
     async function getPeriodsChoices() {
       try {
         const response = await getApiObjectsList(
-          `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/periods/?ordering=-date_start&fields=id,label,status,status_display`
+          `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/periods/?ordering=-date_start&fields=id,name,label,status,status_display`
         );
         setPeriods(response);
       } catch {
@@ -406,7 +406,9 @@ export default function ExpensePredictionsPage() {
             >
               Predictions
             </Typography>
-            {periodPredictions.length > 0 && addButton}
+            {periodStatus !== PeriodStatuses.CLOSED &&
+              periodPredictions.length > 0 &&
+              addButton}
           </Stack>
           <Divider sx={{ mb: 1 }} />
           {periodFilter && !predictionsLoading && (
