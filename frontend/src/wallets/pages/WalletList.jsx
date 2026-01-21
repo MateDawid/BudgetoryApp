@@ -21,13 +21,15 @@ const INFO_DIALOG_DATA = {
       >
         <Box>
           <Typography variant="h6">Wallet "Daily expenses"</Typography>
-          <Typography fontStyle='italic'>Purpose: To cover daily expenses.</Typography>
+          <Typography fontStyle="italic">
+            Purpose: To cover daily expenses.
+          </Typography>
           <Typography>• Deposit "Personal account"</Typography>
           <Typography>• Deposit "Common account"</Typography>
         </Box>
         <Box>
           <Typography variant="h6">Wallet "Savings"</Typography>
-          <Typography fontStyle='italic'>Purpose: To save money.</Typography>
+          <Typography fontStyle="italic">Purpose: To save money.</Typography>
           <Typography>• Deposit "Brokerage account"</Typography>
           <Typography>• Deposit "Treasury bonds"</Typography>
         </Box>
