@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, List, ListItem, ListItemText, Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import WalletDataGrid from '../components/WalletDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
