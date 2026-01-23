@@ -253,9 +253,10 @@ describe('ExpensePredictionsPage', () => {
       await act(async () => {
         renderComponent();
       });
-      expect(
-        screen.getByText('Expenses Predictions in Period')
-      ).toBeInTheDocument();
+      // Use getAllByText and check the first one (h4 header)
+      const headers = screen.getAllByText('Predictions');
+      expect(headers[0]).toBeInTheDocument();
+      expect(headers[0].tagName).toBe('H4');
     });
 
     test('renders period results section header', async () => {
@@ -269,7 +270,10 @@ describe('ExpensePredictionsPage', () => {
       await act(async () => {
         renderComponent();
       });
-      expect(screen.getByText('Predictions')).toBeInTheDocument();
+      // Use getAllByText and check the second one (h5 section header)
+      const headers = screen.getAllByText('Predictions');
+      expect(headers[1]).toBeInTheDocument();
+      expect(headers[1].tagName).toBe('H5');
     });
 
     test('shows "Period not selected" message initially', async () => {
@@ -748,9 +752,8 @@ describe('ExpensePredictionsPage', () => {
       );
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Expenses Predictions in Period')
-        ).toBeInTheDocument();
+        const headers = screen.getAllByText('Predictions');
+        expect(headers[0]).toBeInTheDocument();
       });
 
       await act(async () => {
@@ -808,9 +811,8 @@ describe('ExpensePredictionsPage', () => {
       renderComponent();
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Expenses Predictions in Period')
-        ).toBeInTheDocument();
+        const headers = screen.getAllByText('Predictions');
+        expect(headers[0]).toBeInTheDocument();
       });
 
       consoleSpy.mockRestore();

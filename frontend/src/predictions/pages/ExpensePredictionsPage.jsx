@@ -21,7 +21,19 @@ import StyledButton from '../../app_infrastructure/components/StyledButton';
 import AddIcon from '@mui/icons-material/Add';
 import PeriodStatuses from '../../periods/utils/PeriodStatuses';
 import { useNavigate } from 'react-router-dom';
+import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
+const INFO_DIALOG_DATA = {
+  title: 'What is a Prediction?',
+  content: (
+    <Typography>
+      A Prediction is your planned spending budget for a specific Category
+      within a Period. Set how much you plan to spend, then track your actual
+      expenses against that budget to monitor your progress and see how much you
+      have left.
+    </Typography>
+  ),
+};
 const UNCATEGORIZED_PRIORITY = -1;
 
 const baseOrderingOptions = [
@@ -56,6 +68,7 @@ export default function ExpensePredictionsPage() {
   const { setAlert } = useContext(AlertContext);
   const [periodResultsLoading, setPeriodResultsLoading] = useState(false);
   const [predictionsLoading, setPredictionsLoading] = useState(false);
+  const [infoDialogOpened, setInfoDialogOpened] = useState(false);
 
   // Urls
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/expense_predictions/`;
@@ -360,9 +373,26 @@ export default function ExpensePredictionsPage() {
           spacing={1}
           mb={1}
         >
-          <Typography variant="h4" sx={{ display: 'block', color: '#BD0000' }}>
-            Expenses Predictions in Period
-          </Typography>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-start"
+            spacing={1}
+            mb={1}
+          >
+            <Typography
+              variant="h4"
+              sx={{ display: 'block', color: '#BD0000' }}
+            >
+              Predictions
+            </Typography>
+            <InfoDialog
+              dialogOpened={infoDialogOpened}
+              setDialogOpened={setInfoDialogOpened}
+              dialogTitle={INFO_DIALOG_DATA.title}
+              dialogContent={INFO_DIALOG_DATA.content}
+            />
+          </Stack>
           <Stack
             direction="row"
             alignItems="center"
