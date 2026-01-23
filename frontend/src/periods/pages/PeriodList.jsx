@@ -6,7 +6,7 @@ import PeriodDataGrid from '../components/PeriodDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Period?',
+  title: 'What is a Period?',
   content: (
     <>
       <Typography>

@@ -6,7 +6,7 @@ import EntityDataGrid, { EntityTypes } from '../components/EntityDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Deposit?',
+  title: 'What is a Deposit?',
   content: (
     <Typography>
       A Deposit represents an account or place where your funds are stored, such

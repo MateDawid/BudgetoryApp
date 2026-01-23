@@ -6,7 +6,7 @@ import WalletDataGrid from '../components/WalletDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Wallet?',
+  title: 'What is a Wallet?',
   content: (
     <>
       <Typography>

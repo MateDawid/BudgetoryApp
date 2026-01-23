@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Prediction?',
+  title: 'What is a Prediction?',
   content: (
     <Typography>
       A Prediction is your planned spending budget for a specific Category

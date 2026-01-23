@@ -6,7 +6,7 @@ import EntityDataGrid, { EntityTypes } from '../components/EntityDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Entity?',
+  title: 'What is an Entity?',
   content: (
     <Typography>
       An Entity is the counterparty in your transactions. While your Deposits
