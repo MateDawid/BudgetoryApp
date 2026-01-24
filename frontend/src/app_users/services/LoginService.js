@@ -10,6 +10,25 @@ const calculateTokenExpirationTime = (tokenLifetime) => {
   return (new Date().getTime() + numberTokenLifetime * 1000).toString();
 };
 
+const saveLoginDataInStorage = (loginApiResponse) => {
+  window.localStorage.setItem(
+    'budgetory.accessTokenExpiresIn',
+    calculateTokenExpirationTime(process.env.REACT_APP_ACCESS_TOKEN_LIFETIME)
+  );
+  window.localStorage.setItem(
+    'budgetory.refreshTokenExpiresIn',
+    calculateTokenExpirationTime(process.env.REACT_APP_REFRESH_TOKEN_LIFETIME)
+  );
+  window.localStorage.setItem(
+    'budgetory.accessToken',
+    loginApiResponse.data.access
+  );
+  window.localStorage.setItem(
+    'budgetory.refreshToken',
+    loginApiResponse.data.refresh
+  );
+};
+
 /**
  * Function to log in User with provided credentials. Adds token key in localStorage.
  * @param {string} email - User email.
@@ -23,19 +42,22 @@ export const logIn = async (email, password) => {
       email: email,
       password: password,
     });
-    window.localStorage.setItem(
-      'budgetory.accessTokenExpiresIn',
-      calculateTokenExpirationTime(process.env.REACT_APP_ACCESS_TOKEN_LIFETIME)
-    );
-    window.localStorage.setItem(
-      'budgetory.refreshTokenExpiresIn',
-      calculateTokenExpirationTime(process.env.REACT_APP_REFRESH_TOKEN_LIFETIME)
-    );
-    window.localStorage.setItem('budgetory.accessToken', response.data.access);
-    window.localStorage.setItem(
-      'budgetory.refreshToken',
-      response.data.refresh
-    );
+    saveLoginDataInStorage(response);
+    return { response, isError: false };
+  } catch (error) {
+    return { response: error, isError: true };
+  }
+};
+
+/**
+ * Function to log in as Demo User. Adds token key in localStorage.
+ * @return {Promise} - Request response and isError boolean value.
+ */
+export const demoLogIn = async () => {
+  const url = `${process.env.REACT_APP_BACKEND_URL}/api/users/demo-login/`;
+  try {
+    const response = await axios.post(url);
+    saveLoginDataInStorage(response);
     return { response, isError: false };
   } catch (error) {
     return { response: error, isError: true };
