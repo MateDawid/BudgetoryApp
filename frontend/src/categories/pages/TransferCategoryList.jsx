@@ -6,7 +6,7 @@ import CategoryDataGrid from '../components/CategoryDataGrid';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
 const INFO_DIALOG_DATA = {
-  title: 'What is Category?',
+  title: 'What is a Category?',
   content: (
     <>
       <Typography>
