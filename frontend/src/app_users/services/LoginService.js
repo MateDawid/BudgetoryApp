@@ -60,7 +60,10 @@ export const demoLogIn = async () => {
     saveLoginDataInStorage(response);
     return { response, isError: false };
   } catch (error) {
-    return { response: error, isError: true };
+    return {
+      response: { error: 'Unexpected error occured' },
+      isError: true,
+    };
   }
 };
 
