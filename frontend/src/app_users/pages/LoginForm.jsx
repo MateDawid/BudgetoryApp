@@ -7,6 +7,7 @@ import {
   TextField,
   Tooltip,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import { demoLogIn, getAccessToken, logIn } from '../services/LoginService';
@@ -34,6 +35,7 @@ function LoginForm() {
   const { alert, setAlert } = useContext(AlertContext);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   useEffect(() => {
     /**
@@ -66,6 +68,7 @@ function LoginForm() {
     let isError;
     try {
       if (isDemoLogin) {
+        setDemoLoading(true);
         ({ response, isError } = await demoLogIn());
       } else {
         ({ response, isError } = await logIn(
@@ -84,6 +87,7 @@ function LoginForm() {
             'An error occurred. Please try again.',
         });
       } else {
+        if (isDemoLogin) setDemoLoading(false);
         setIsLoggedIn(true);
       }
     } catch (error) {
@@ -207,13 +211,20 @@ function LoginForm() {
             sx={{
               borderColor: '#BD0000',
               color: '#BD0000',
+              minHeight: '36.5px', // Prevents button from growing
               '&:hover': {
                 borderColor: '#BD0000',
                 bgcolor: 'rgba(189, 0, 0, 0.04)',
               },
             }}
           >
-            Demo Log in
+            {demoLoading && (
+              <CircularProgress
+                size={20} // Match approximate text height
+                sx={{ color: '#BD0000' }}
+              />
+            )}
+            {!demoLoading && 'Demo Log in'}
           </Button>
           <Tooltip
             title="Try Budgetory with sample data without registration."
