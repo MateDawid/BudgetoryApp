@@ -1,11 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Avatar, Container, Paper, TextField } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Container,
+  Paper,
+  TextField,
+  Tooltip,
+  IconButton,
+  CircularProgress,
+} from '@mui/material';
 import Button from '@mui/material/Button';
-import { getAccessToken, logIn } from '../services/LoginService';
+import { demoLogIn, getAccessToken, logIn } from '../services/LoginService';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Box from '@mui/material/Box';
 import { AlertContext } from '../../app_infrastructure/store/AlertContext';
 
@@ -25,6 +35,7 @@ function LoginForm() {
   const { alert, setAlert } = useContext(AlertContext);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   useEffect(() => {
     /**
@@ -46,14 +57,33 @@ function LoginForm() {
    * @param {Object} data - Form data.
    */
   const onSubmit = async (data) => {
+    handleLogIn(data);
+  };
+
+  /**
+   * Handles log in.
+   */
+  const handleLogIn = async (loginData = undefined, isDemoLogin = false) => {
+    let response;
+    let isError;
     try {
-      const { response, isError } = await logIn(data.email, data.password);
+      if (isDemoLogin) {
+        setDemoLoading(true);
+        ({ response, isError } = await demoLogIn());
+      } else {
+        ({ response, isError } = await logIn(
+          loginData.email,
+          loginData.password
+        ));
+      }
+
       if (isError) {
         setAlert({
           type: 'error',
           message:
-            response.response.data.detail?.non_field_errors ||
-            response.response.data.detail ||
+            response.response?.data?.detail?.non_field_errors ||
+            response.response?.data?.detail ||
+            response.error ||
             'An error occurred. Please try again.',
         });
       } else {
@@ -63,9 +93,11 @@ function LoginForm() {
       setAlert({
         type: 'error',
         message:
-          error.response.data.message ||
+          error.response?.data?.message ||
           'Network error. Please try again later.',
       });
+    } finally {
+      if (isDemoLogin) setDemoLoading(false);
     }
   };
 
@@ -153,15 +185,57 @@ function LoginForm() {
             Log in
           </Button>
         </Box>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ textAlign: 'center', mt: 2, mb: 1 }}
+        >
+          New to Budgetory?
+        </Typography>
+
         <Button
           component={RouterLink}
           to="/register"
           variant="contained"
           fullWidth
-          sx={{ mt: 1, bgcolor: '#BD0000' }}
+          sx={{ mt: 0, bgcolor: '#BD0000' }}
         >
           Register
         </Button>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+          <Button
+            onClick={() => handleLogIn({}, true)}
+            variant="outlined"
+            fullWidth
+            sx={{
+              borderColor: '#BD0000',
+              color: '#BD0000',
+              minHeight: '36.5px', // Prevents button from growing
+              '&:hover': {
+                borderColor: '#BD0000',
+                bgcolor: 'rgba(189, 0, 0, 0.04)',
+              },
+            }}
+          >
+            {demoLoading && (
+              <CircularProgress
+                size={20} // Match approximate text height
+                sx={{ color: '#BD0000' }}
+              />
+            )}
+            {!demoLoading && 'Demo Log in'}
+          </Button>
+          <Tooltip
+            title="Try Budgetory with sample data without registration."
+            placement="top"
+          >
+            <IconButton size="small">
+              <InfoOutlinedIcon fontSize="small" sx={{ color: '#BD0000' }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Paper>
     </Container>
   );

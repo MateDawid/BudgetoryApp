@@ -21,11 +21,11 @@ export const getApiResponse = async (url, requestOptions) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
     if (error instanceof ApiError) {
       throw error;
     } else {
-      throw new Error('Unexpected error occurred.');
+      console.error(error);
+      throw new ApiError('Unexpected error occurred.');
     }
   }
 };

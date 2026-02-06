@@ -8,6 +8,7 @@ import TopEntitiesInPeriodChart from '../../charts/components/TopEntitiesInPerio
 import WalletsSummaryTable from '../components/WalletsSummaryTable';
 import { getApiObjectsList } from '../services/APIService';
 import { WalletContext } from '../store/WalletContext';
+import { AlertContext } from '../store/AlertContext';
 
 const StyledHeader = styled(Typography)(() => ({
   display: 'block',
@@ -23,6 +24,7 @@ const StyledHeader = styled(Typography)(() => ({
 function LandingPage() {
   document.title = 'Budgetory';
   const { getContextWalletId } = useContext(WalletContext);
+  const { setAlert } = useContext(AlertContext);
   const contextWalletId = getContextWalletId();
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
@@ -32,11 +34,19 @@ function LandingPage() {
    */
   useEffect(() => {
     async function getWallets() {
-      const response = await getApiObjectsList(
-        `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?ordering=name&fields=id,name,deposits_count,balance,currency_name`
-      );
-      setWallets(response);
-      setLoading(false);
+      try {
+        const response = await getApiObjectsList(
+          `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?ordering=name&fields=id,name,deposits_count,balance,currency_name`
+        );
+        setWallets(response);
+      } catch (ApiError) {
+        setWallets([]);
+        if (!['/login', '/register'].includes(window.location.pathname)) {
+          setAlert({ type: 'error', message: 'Wallets loading failed.' });
+        }
+      } finally {
+        setLoading(false);
+      }
     }
     getWallets();
   }, []);

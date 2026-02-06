@@ -193,6 +193,13 @@ function RegisterForm() {
             Register
           </Button>
         </Box>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ textAlign: 'center', mt: 2, mb: 1 }}
+        >
+          Have account already?
+        </Typography>
         <Button
           data-cy="login-button"
           component={RouterLink}
