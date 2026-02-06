@@ -61,7 +61,10 @@ export const demoLogIn = async () => {
     return { response, isError: false };
   } catch (error) {
     return {
-      response: { error: 'Unexpected error occured' },
+      response: {
+        error:
+          error.response?.data?.error || 'Unexpected error on demo log in.',
+      },
       isError: true,
     };
   }
