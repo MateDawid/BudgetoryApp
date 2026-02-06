@@ -87,16 +87,17 @@ function LoginForm() {
             'An error occurred. Please try again.',
         });
       } else {
-        if (isDemoLogin) setDemoLoading(false);
         setIsLoggedIn(true);
       }
     } catch (error) {
       setAlert({
         type: 'error',
         message:
-          error.response.data.message ||
+          error.response?.data?.message ||
           'Network error. Please try again later.',
       });
+    } finally {
+      if (isDemoLogin) setDemoLoading(false);
     }
   };
 
