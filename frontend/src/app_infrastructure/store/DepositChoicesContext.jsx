@@ -9,11 +9,15 @@ export const DepositChoicesContext = createContext();
  */
 export const DepositChoicesProvider = ({ children }) => {
   const { getContextWalletId } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const [depositChoices, setDepositChoices] = useState([]);
 
   useEffect(() => {
     const loadDepositsChoices = async () => {
+      const contextWalletId = getContextWalletId();
+      if (!contextWalletId) {
+        return;
+      }
+
       try {
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits/?ordering=name&fields=value,label`
@@ -23,11 +27,9 @@ export const DepositChoicesProvider = ({ children }) => {
         setDepositChoices([]);
       }
     };
-    if (!contextWalletId) {
-      return;
-    }
+
     loadDepositsChoices();
-  }, [contextWalletId]);
+  }, [getContextWalletId]);
 
   const value = { depositChoices };
 

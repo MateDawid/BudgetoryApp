@@ -9,11 +9,15 @@ export const PeriodChoicesContext = createContext();
  */
 export const PeriodChoicesProvider = ({ children }) => {
   const { getContextWalletId } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const [periodChoices, setPeriodChoices] = useState([]);
 
   useEffect(() => {
     const loadPeriodsChoices = async () => {
+      const contextWalletId = getContextWalletId();
+      if (!contextWalletId) {
+        return;
+      }
+
       try {
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/periods/?ordering=-date_start&fields=value,label`
@@ -23,11 +27,9 @@ export const PeriodChoicesProvider = ({ children }) => {
         setPeriodChoices([]);
       }
     };
-    if (!contextWalletId) {
-      return;
-    }
+
     loadPeriodsChoices();
-  }, [contextWalletId]);
+  }, [getContextWalletId]);
 
   const value = { periodChoices };
 

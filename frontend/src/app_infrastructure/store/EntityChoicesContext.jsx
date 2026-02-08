@@ -9,11 +9,14 @@ export const EntityChoicesContext = createContext();
  */
 export const EntityChoicesProvider = ({ children }) => {
   const { getContextWalletId } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const [entityChoices, setEntityChoices] = useState([]);
 
   useEffect(() => {
     const loadEntityChoices = async () => {
+      const contextWalletId = getContextWalletId();
+      if (!contextWalletId) {
+        return;
+      }
       try {
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/entities/?ordering=-is_deposit,name`
@@ -23,11 +26,9 @@ export const EntityChoicesProvider = ({ children }) => {
         setEntityChoices([]);
       }
     };
-    if (!contextWalletId) {
-      return;
-    }
+
     loadEntityChoices();
-  }, [contextWalletId]);
+  }, [getContextWalletId]);
 
   const value = { entityChoices };
 
