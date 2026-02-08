@@ -22,11 +22,14 @@ import { getApiObjectsList } from '../services/APIService';
 const Rightbar = () => {
   const { setAlert } = useContext(AlertContext);
   const { getContextWalletId, refreshTimestamp } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const [deposits, setDeposits] = useState([]);
 
   useEffect(() => {
     const loadWalletDeposits = async () => {
+      const contextWalletId = getContextWalletId();
+      if (!contextWalletId) {
+        return;
+      }
       if (
         !contextWalletId ||
         ['/login', '/register'].includes(window.location.pathname)
@@ -44,11 +47,8 @@ const Rightbar = () => {
         setDeposits([]);
       }
     };
-    if (!contextWalletId) {
-      return;
-    }
     loadWalletDeposits();
-  }, [contextWalletId, refreshTimestamp]);
+  }, [getContextWalletId, refreshTimestamp]);
 
   return (
     <Box width={240} sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
@@ -70,7 +70,7 @@ const Rightbar = () => {
             <WalletSelector />
             <Divider variant="middle" />
             <List sx={{ width: '100%' }}>
-              {contextWalletId && deposits.length === 0 && (
+              {deposits.length === 0 && (
                 <ListItem>
                   <ListItemText
                     primary={

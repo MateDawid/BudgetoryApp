@@ -25,7 +25,6 @@ function LandingPage() {
   document.title = 'Budgetory';
   const { getContextWalletId } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
-  const contextWalletId = getContextWalletId();
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
 
@@ -34,6 +33,11 @@ function LandingPage() {
    */
   useEffect(() => {
     async function getWallets() {
+      const contextWalletId = getContextWalletId();
+      if (!contextWalletId) {
+        return;
+      }
+
       try {
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?ordering=name&fields=id,name,deposits_count,balance,currency_name`
@@ -49,7 +53,7 @@ function LandingPage() {
       }
     }
     getWallets();
-  }, []);
+  }, [getContextWalletId]);
 
   return (
     <Grid container spacing={2}>
@@ -85,7 +89,7 @@ function LandingPage() {
           </Paper>
         </Grid>
       )}
-      {!loading && contextWalletId && wallets.length > 0 && (
+      {!loading && wallets.length > 0 && (
         <>
           <Grid size={12}>
             <WalletsSummaryTable wallets={wallets} />
