@@ -21,12 +21,11 @@ import { getApiObjectsList } from '../services/APIService';
  */
 const Rightbar = () => {
   const { setAlert } = useContext(AlertContext);
-  const { getContextWalletId, refreshTimestamp } = useContext(WalletContext);
+  const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
   const [deposits, setDeposits] = useState([]);
 
   useEffect(() => {
     const loadWalletDeposits = async () => {
-      const contextWalletId = getContextWalletId();
       if (!contextWalletId) {
         return;
       }
@@ -48,7 +47,7 @@ const Rightbar = () => {
       }
     };
     loadWalletDeposits();
-  }, [getContextWalletId, refreshTimestamp]);
+  }, [contextWalletId, refreshTimestamp]);
 
   return (
     <Box width={240} sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>

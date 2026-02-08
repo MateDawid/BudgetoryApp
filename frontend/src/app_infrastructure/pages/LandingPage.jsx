@@ -23,7 +23,7 @@ const StyledHeader = styled(Typography)(() => ({
  */
 function LandingPage() {
   document.title = 'Budgetory';
-  const { getContextWalletId } = useContext(WalletContext);
+  const { contextWalletId } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
@@ -33,7 +33,6 @@ function LandingPage() {
    */
   useEffect(() => {
     async function getWallets() {
-      const contextWalletId = getContextWalletId();
       if (!contextWalletId) {
         return;
       }
@@ -53,7 +52,7 @@ function LandingPage() {
       }
     }
     getWallets();
-  }, [getContextWalletId]);
+  }, [contextWalletId]);
 
   return (
     <Grid container spacing={2}>

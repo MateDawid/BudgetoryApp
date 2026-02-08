@@ -8,7 +8,7 @@ import { getApiObjectsList } from '../services/APIService';
  */
 const WalletSelector = () => {
   const {
-    getContextWalletId,
+    contextWalletId,
     setContextWalletId,
     setContextWalletCurrency,
     refreshTimestamp,
@@ -23,11 +23,6 @@ const WalletSelector = () => {
    */
   useEffect(() => {
     const loadWallets = async () => {
-      const loadedWalletId = getContextWalletId();
-      if (!loadedWalletId) {
-        return;
-      }
-
       try {
         const apiResponse = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?fields=id,name,currency_name`
@@ -41,7 +36,7 @@ const WalletSelector = () => {
           return;
         }
         const contextWallet = apiResponse.find(
-          (wallet) => wallet.id === loadedWalletId
+          (wallet) => wallet.id === contextWalletId
         );
         if (contextWallet) {
           setSelectedWallet(contextWallet);

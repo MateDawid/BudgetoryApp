@@ -33,9 +33,7 @@ export default function TransfersInPeriodsChart({
   depositId = null,
   entityId = null,
 }) {
-  const { getContextWalletId, contextWalletCurrency } =
-    useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   const { depositChoices } = useContext(DepositChoicesContext);
   const { entityChoices } = useContext(EntityChoicesContext);
 

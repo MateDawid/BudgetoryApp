@@ -26,9 +26,7 @@ const ENTITIES_ON_CHART = [
  * @param {string} [props.periodId] - Optional Period ID value.
  */
 export default function TopEntitiesInPeriodChart({ periodId = null }) {
-  const { getContextWalletId, contextWalletCurrency } =
-    useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   const { depositChoices } = useContext(DepositChoicesContext);
   const { periodChoices } = useContext(PeriodChoicesContext);
 
