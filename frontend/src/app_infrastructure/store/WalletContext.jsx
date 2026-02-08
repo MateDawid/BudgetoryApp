@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const WalletContext = createContext();
 
@@ -10,34 +10,26 @@ export const ContextWalletProvider = ({ children }) => {
   const [contextWalletCurrency, setContextWalletCurrency] = useState(null);
   const [refreshTimestamp, setRefreshTimestamp] = useState(null);
 
+  // Automatically load from localStorage on mount
+  useEffect(() => {
+    const storageContextWalletId = localStorage.getItem('budgetory.contextWallet')
+      ? parseInt(localStorage.getItem('budgetory.contextWallet'), 10)
+      : null;
+    const storageContextWalletCurrency =
+      localStorage.getItem('budgetory.contextWalletCurrency') || null;
+    setContextWalletId(storageContextWalletId);
+    setContextWalletCurrency(storageContextWalletCurrency);
+  }, []);
+
   /**
-   * Updates refreshTimestampt to current time.
+   * Updates refreshTimestamp to current time.
    */
   const updateRefreshTimestamp = () => {
     setRefreshTimestamp(Date.now());
   };
 
-  /**
-   * Gets context Wallet id from context or storage.
-   */
-  const getContextWalletId = () => {
-    if (contextWalletId) {
-      return contextWalletId;
-    }
-    const storageContextWalletId = localStorage.getItem(
-      'budgetory.contextWallet'
-    )
-      ? parseInt(localStorage.getItem('budgetory.contextWallet'), 10)
-      : null;
-    const storageContextWalletCurrency =
-      localStorage.getItem('budgetory.contextWalletCurrency') || '';
-    setContextWalletId(storageContextWalletId);
-    setContextWalletCurrency(storageContextWalletCurrency);
-    return storageContextWalletId;
-  };
-
   const value = {
-    getContextWalletId,
+    contextWalletId,
     setContextWalletId,
     contextWalletCurrency,
     setContextWalletCurrency,
