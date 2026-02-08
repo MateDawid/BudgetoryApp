@@ -10,9 +10,10 @@ export const ContextWalletProvider = ({ children }) => {
   const [contextWalletCurrency, setContextWalletCurrency] = useState(null);
   const [refreshTimestamp, setRefreshTimestamp] = useState(null);
 
-  // Automatically load from localStorage on mount
   useEffect(() => {
-    const storageContextWalletId = localStorage.getItem('budgetory.contextWallet')
+    const storageContextWalletId = localStorage.getItem(
+      'budgetory.contextWallet'
+    )
       ? parseInt(localStorage.getItem('budgetory.contextWallet'), 10)
       : null;
     const storageContextWalletCurrency =
