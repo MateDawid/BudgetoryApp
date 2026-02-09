@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
 export const WalletContext = createContext();
 
@@ -6,22 +6,19 @@ export const WalletContext = createContext();
  * ContextWalletProvider for storing context Wallet between pages.
  */
 export const ContextWalletProvider = ({ children }) => {
-  const [contextWalletId, setContextWalletId] = useState(null);
-  const [contextWalletCurrency, setContextWalletCurrency] = useState(null);
+  const getInitialWalletId = () => {
+    const stored = localStorage.getItem('budgetory.contextWallet');
+    return stored ? parseInt(stored, 10) : null;
+  };
+
+  const getInitialCurrency = () => {
+    return localStorage.getItem('budgetory.contextWalletCurrency') || null;
+  };
+
+  const [contextWalletId, setContextWalletId] = useState(getInitialWalletId);
+  const [contextWalletCurrency, setContextWalletCurrency] =
+    useState(getInitialCurrency);
   const [refreshTimestamp, setRefreshTimestamp] = useState(null);
-
-  useEffect(() => {
-    const storageContextWalletId = localStorage.getItem(
-      'budgetory.contextWallet'
-    )
-      ? parseInt(localStorage.getItem('budgetory.contextWallet'), 10)
-      : null;
-    const storageContextWalletCurrency =
-      localStorage.getItem('budgetory.contextWalletCurrency') || null;
-    setContextWalletId(storageContextWalletId);
-    setContextWalletCurrency(storageContextWalletCurrency);
-  }, []);
-
   /**
    * Updates refreshTimestamp to current time.
    */
