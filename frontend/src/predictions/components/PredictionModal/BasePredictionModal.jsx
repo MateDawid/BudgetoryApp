@@ -19,9 +19,8 @@ export default function BasePredictionModal({
   callApi,
   editedPrediction = undefined,
 }) {
-  const { getContextWalletId, contextWalletCurrency, refreshTimestamp } =
+  const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
 
   // Selectables
   const [categories, setCategories] = useState([]);

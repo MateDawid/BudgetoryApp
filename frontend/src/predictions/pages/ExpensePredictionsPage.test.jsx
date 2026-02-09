@@ -136,7 +136,6 @@ jest.mock('../../app_infrastructure/components/StyledButton', () => {
 
 describe('ExpensePredictionsPage', () => {
   const mockSetAlert = jest.fn();
-  let mockGetContextWalletId;
   let mockRefreshTimestamp;
   let defaultWalletContext;
   let defaultAlertContext;
@@ -231,12 +230,10 @@ describe('ExpensePredictionsPage', () => {
     mockNavigate.mockClear();
     process.env.REACT_APP_BACKEND_URL = 'http://localhost:8000';
 
-    // Recreate the mock function with implementation after clearAllMocks
-    mockGetContextWalletId = jest.fn(() => 'wallet-123');
     mockRefreshTimestamp = Date.now();
 
     defaultWalletContext = {
-      getContextWalletId: mockGetContextWalletId,
+      contextWalletId: 'wallet-123',
       refreshTimestamp: mockRefreshTimestamp,
     };
 
@@ -335,7 +332,7 @@ describe('ExpensePredictionsPage', () => {
 
     test('navigates to wallets page when contextWalletId is null', async () => {
       const noWalletContext = {
-        getContextWalletId: jest.fn(() => null),
+        contextWalletId: null,
         refreshTimestamp: mockRefreshTimestamp,
       };
 

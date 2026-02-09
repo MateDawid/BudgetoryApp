@@ -125,7 +125,6 @@ jest.mock(
 
 describe('TransferDataGrid', () => {
   const mockSetAlert = jest.fn();
-  const mockGetContextWalletId = jest.fn(() => 123);
   const mockContextWalletCurrency = 'USD';
   const mockRefreshTimestamp = Date.now();
 
@@ -134,7 +133,7 @@ describe('TransferDataGrid', () => {
   };
 
   const mockWalletContext = {
-    getContextWalletId: mockGetContextWalletId,
+    contextWalletId: 123,
     contextWalletCurrency: mockContextWalletCurrency,
     refreshTimestamp: mockRefreshTimestamp,
   };
@@ -201,7 +200,6 @@ describe('TransferDataGrid', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetContextWalletId.mockReturnValue(123);
     process.env.REACT_APP_BACKEND_URL = 'http://localhost:8000';
 
     // Setup default mock responses
@@ -334,10 +332,9 @@ describe('TransferDataGrid', () => {
     });
 
     test('does not fetch data when contextWalletId is not set', () => {
-      const mockGetContextWalletIdNull = jest.fn(() => null);
       const contextWithoutWallet = {
         ...mockWalletContext,
-        getContextWalletId: mockGetContextWalletIdNull,
+        contextWalletId: null,
       };
 
       render(

@@ -20,9 +20,7 @@ export default function PredictionInspectModal({
   inspectOpen,
   setInspectOpen,
 }) {
-  const { getContextWalletId, contextWalletCurrency } =
-    useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   const [expenses, setExpenses] = useState([]);
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/expenses/`;
 

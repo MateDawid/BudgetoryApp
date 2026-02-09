@@ -63,8 +63,7 @@ const draftPeriodOrderingOptions = [
  */
 export default function ExpensePredictionsPage() {
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
   const [periodResultsLoading, setPeriodResultsLoading] = useState(false);
   const [predictionsLoading, setPredictionsLoading] = useState(false);

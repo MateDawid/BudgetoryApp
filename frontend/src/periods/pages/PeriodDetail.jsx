@@ -18,9 +18,8 @@ import { WalletContext } from '../../app_infrastructure/store/WalletContext';
 export default function PeriodDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp, updateRefreshTimestamp } =
+  const { contextWalletId, refreshTimestamp, updateRefreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/periods/`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);

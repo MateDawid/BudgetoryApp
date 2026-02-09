@@ -16,9 +16,8 @@ import TransfersInPeriodsChart from '../../charts/components/TransfersInPeriodsC
 export default function EntityDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp, updateRefreshTimestamp } =
+  const { contextWalletId, refreshTimestamp, updateRefreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/entities/`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);

@@ -20,9 +20,8 @@ import CategoryTypes from '../utils/CategoryTypes';
 export default function TransferCategoryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp, updateRefreshTimestamp } =
+  const { contextWalletId, refreshTimestamp, updateRefreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/categories/`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);

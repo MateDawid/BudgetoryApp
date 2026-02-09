@@ -30,8 +30,7 @@ const CategoryDataGrid = () => {
   const navigate = useNavigate();
   // Contexts
   const { setAlert } = useContext(AlertContext);
-  const { getContextWalletId, refreshTimestamp } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
 
   // API URL
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/categories/?ordering=category_type,priority,name`;
@@ -186,10 +185,6 @@ const CategoryDataGrid = () => {
    */
   useEffect(() => {
     const loadData = async () => {
-      if (!contextWalletId) {
-        setLoading(false);
-        return;
-      }
       try {
         const rowsResponse = await getApiObjectsList(
           apiUrl,

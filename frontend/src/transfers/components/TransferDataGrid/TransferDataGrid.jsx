@@ -31,9 +31,8 @@ const TransferDataGrid = ({ transferType }) => {
   const navigate = useNavigate();
   // Contexts
   const { setAlert } = useContext(AlertContext);
-  const { getContextWalletId, contextWalletCurrency, refreshTimestamp } =
+  const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
 
   // API URL
   let apiUrl;
