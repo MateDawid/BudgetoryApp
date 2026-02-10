@@ -143,6 +143,9 @@ export default function ExpensePredictionsPage() {
       });
       return;
     }
+    setPeriodFilter('');
+    setDepositFilter(null);
+    setCategoryFilter(null);
     getPeriodsChoices();
     getDeposits();
     getPriorities();
@@ -178,7 +181,7 @@ export default function ExpensePredictionsPage() {
       return;
     }
     getCategories();
-  }, [contextWalletId, depositFilter, priorityFilter]);
+  }, [depositFilter, priorityFilter]);
 
   /**
    * Fetches Period results from API.
@@ -505,6 +508,7 @@ export default function ExpensePredictionsPage() {
                     : baseOrderingOptions
                 }
                 label="Sort by"
+                disableClearable
                 sx={{ width: { sm: '100%', md: 200 }, margin: 0 }}
               />
             </Stack>
