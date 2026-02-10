@@ -135,7 +135,7 @@ export default function BaseTransferModal({
     }
     if (!contextWalletId || !formOpen) return;
     getDeposits();
-  }, [contextWalletId, refreshTimestamp]);
+  }, [contextWalletId, formOpen, refreshTimestamp]);
 
   /**
    * Fetches select options for Transfer entities objects from API.
@@ -149,7 +149,7 @@ export default function BaseTransferModal({
     }
     if (!contextWalletId || !formOpen) return;
     getEntities();
-  }, [contextWalletId, refreshTimestamp, entityAdded]);
+  }, [contextWalletId, formOpen, refreshTimestamp, entityAdded]);
 
   /**
    * Fetches select options for Transfer categories object from API.
