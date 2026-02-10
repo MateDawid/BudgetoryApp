@@ -110,6 +110,7 @@ const TransferDataGrid = ({ transferType }) => {
     if (!contextWalletId) {
       return;
     }
+    setFilterModel({ items: [] });
     getPeriodsChoices();
     getCategories();
     getDeposits();
@@ -301,13 +302,7 @@ const TransferDataGrid = ({ transferType }) => {
       return;
     }
     loadData();
-  }, [
-    contextWalletId,
-    paginationModel,
-    sortModel,
-    filterModel,
-    refreshTimestamp,
-  ]);
+  }, [paginationModel, sortModel, filterModel, refreshTimestamp]);
 
   /**
    * Function to update DataGrid pagination model.
