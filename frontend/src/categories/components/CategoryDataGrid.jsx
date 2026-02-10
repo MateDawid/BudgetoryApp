@@ -86,6 +86,7 @@ const CategoryDataGrid = () => {
     if (!contextWalletId) {
       return;
     }
+    setFilterModel({ items: [] });
     getDeposits();
     getCategoryTypes();
     getPriorities();
@@ -209,13 +210,7 @@ const CategoryDataGrid = () => {
       return;
     }
     loadData();
-  }, [
-    contextWalletId,
-    paginationModel,
-    sortModel,
-    filterModel,
-    refreshTimestamp,
-  ]);
+  }, [paginationModel, sortModel, filterModel, refreshTimestamp]);
 
   /**
    * Function to update DataGrid pagination model.
