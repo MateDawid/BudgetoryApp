@@ -73,14 +73,14 @@ export default function ExpensePredictionsPage() {
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/expense_predictions/`;
   const copyPredictionsUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/copy_predictions_from_previous_period/`;
 
-  // // Selectors choices
+  // Selectors choices
   const [periods, setPeriods] = useState([]);
   const [deposits, setDeposits] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [categories, setCategories] = useState([]);
   const [progressStatuses, setProgressStatuses] = useState([]);
 
-  // // Filters values
+  // Filters values
   const [periodFilter, setPeriodFilter] = useState('');
   const [depositFilter, setDepositFilter] = useState(null);
   const [priorityFilter, setPriorityFilter] = useState(null);
@@ -181,24 +181,6 @@ export default function ExpensePredictionsPage() {
     }
     getCategories();
   }, [depositFilter, priorityFilter]);
-
-  // /**
-  //  * Fetches Period results from API.
-  //  */
-  // useEffect(() => {
-  //   async function getPeriodResults() {
-  //     const depositsPeriodResultsResponse = await getApiObjectsList(
-  //       `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits_predictions_results/${periodFilter}/`
-  //     );
-  //     setPeriodResults(depositsPeriodResultsResponse);
-  //     setPeriodResultsLoading(false);
-  //   }
-  //   if (!contextWalletId || !periodFilter) {
-  //     return;
-  //   }
-  //   setPeriodResultsLoading(true);
-  //   getPeriodResults();
-  // }, [periodFilter, refreshTimestamp]);
 
   /**
    * Fetches ExpensePrediction objects from API.
