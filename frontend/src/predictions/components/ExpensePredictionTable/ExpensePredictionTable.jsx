@@ -17,7 +17,6 @@ import { useNavigate } from 'react-router-dom';
 import { AlertContext } from '../../../app_infrastructure/store/AlertContext';
 import { Box, Stack, Typography } from '@mui/material';
 import FilterField from '../../../app_infrastructure/components/FilterField';
-import StyledButton from '../../../app_infrastructure/components/StyledButton';
 import CopyPreviousPredictionsButton from '../CopyPreviousPredictionsButton';
 
 const UNCATEGORIZED_PRIORITY = -1;
@@ -44,7 +43,12 @@ const draftPeriodOrderingOptions = [
   { value: '-previous_funds_left', label: 'Previous funds left ↘' },
 ];
 
-export default function ExpensePredictionTable({ periodFilter, periodStatus, setPredictionsLoading, periodsCount }) {
+export default function ExpensePredictionTable({
+  periodFilter,
+  periodStatus,
+  setPredictionsLoading,
+  periodsCount,
+}) {
   const navigate = useNavigate();
   const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
