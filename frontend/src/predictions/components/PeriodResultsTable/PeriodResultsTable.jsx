@@ -32,6 +32,7 @@ export default function PeriodResultsTable({
       setPeriodResultsLoading(false);
     }
     if (!contextWalletId || !periodFilter) {
+      setPeriodResultsLoading(false);
       return;
     }
     setPeriodResultsLoading(true);

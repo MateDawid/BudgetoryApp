@@ -71,17 +71,7 @@ export default function ExpensePredictionTable({
   const [progressStatusFilter, setProgressStatusFilter] = useState(null);
   const [orderingFilter, setOrderingFilter] = useState('category__priority');
 
-  /**
-   * Fetches select options for ExpensePrediction select fields from API.
-   */
   useEffect(() => {
-    async function getDeposits() {
-      const depositsResponse = await getApiObjectsList(
-        `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits/?ordering=name&fields=value,label`
-      );
-      setDeposits(depositsResponse);
-    }
-
     async function getPriorities() {
       const priorityResponse = await getApiObjectsList(
         `${process.env.REACT_APP_BACKEND_URL}/api/categories/priorities/?type=2`
@@ -98,6 +88,20 @@ export default function ExpensePredictionTable({
       );
       setProgressStatuses(progressStatusResponse);
     }
+    getPriorities();
+    getProgressStatuses();
+  }, []);
+
+  /**
+   * Fetches select options for ExpensePrediction select fields from API.
+   */
+  useEffect(() => {
+    async function getDeposits() {
+      const depositsResponse = await getApiObjectsList(
+        `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits/?ordering=name&fields=value,label`
+      );
+      setDeposits(depositsResponse);
+    }
 
     if (!contextWalletId) {
       navigate('/wallets');
@@ -110,8 +114,6 @@ export default function ExpensePredictionTable({
     setDepositFilter(null);
     setCategoryFilter(null);
     getDeposits();
-    getPriorities();
-    getProgressStatuses();
   }, [contextWalletId]);
 
   /**
@@ -179,85 +181,7 @@ export default function ExpensePredictionTable({
     }
     if (!contextWalletId || !periodFilter) {
       setPredictions([]);
-      return;
-    }
-    setPredictionsLoading(true);
-    getPredictions();
-  }, [
-    refreshTimestamp,
-    depositFilter,
-    priorityFilter,
-    categoryFilter,
-    periodFilter,
-    progressStatusFilter,
-    orderingFilter,
-  ]);
-
-  /**
-   * Fetches select options for ExpensePrediction categories object from API.
-   */
-  useEffect(() => {
-    async function getCategories() {
-      const filterModel = {};
-      if (depositFilter) {
-        filterModel['deposit'] = depositFilter;
-      }
-      if (priorityFilter) {
-        filterModel['priority'] = priorityFilter;
-      }
-      const categoryResponse = await getApiObjectsList(
-        `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/categories/?category_type=2`,
-        {},
-        {},
-        filterModel
-      );
-      setCategories(categoryResponse);
-      setCategoryFilter(null);
-    }
-    if (
-      !contextWalletId ||
-      (!priorityFilter && !depositFilter) ||
-      priorityFilter === UNCATEGORIZED_PRIORITY
-    ) {
-      return;
-    }
-    getCategories();
-  }, [depositFilter, priorityFilter]);
-
-  /**
-   * Fetches ExpensePrediction objects from API.
-   */
-  useEffect(() => {
-    const getFilterModel = () => {
-      const filterModel = {};
-      const selectFilters = [
-        { value: periodFilter, apiField: 'period' },
-        { value: categoryFilter, apiField: 'category' },
-        { value: depositFilter, apiField: 'deposit' },
-        { value: progressStatusFilter, apiField: 'progress_status' },
-        { value: priorityFilter, apiField: 'category_priority' },
-        { value: orderingFilter, apiField: 'ordering' },
-      ];
-      selectFilters.forEach((object) => {
-        if (object.value !== null) {
-          filterModel[[object.apiField]] = object.value;
-        }
-      });
-
-      return filterModel;
-    };
-    async function getPredictions() {
-      const predictionsResponse = await getApiObjectsList(
-        apiUrl,
-        {},
-        {},
-        getFilterModel()
-      );
-      setPredictions(predictionsResponse);
       setPredictionsLoading(false);
-    }
-    if (!contextWalletId || !periodFilter) {
-      setPredictions([]);
       return;
     }
     setPredictionsLoading(true);

@@ -10,16 +10,13 @@ import {
 } from '@mui/material';
 import { WalletContext } from '../../app_infrastructure/store/WalletContext';
 import { getApiObjectsList } from '../../app_infrastructure/services/APIService';
-import FilterField from '../../app_infrastructure/components/FilterField';
 import { AlertContext } from '../../app_infrastructure/store/AlertContext';
-import CopyPreviousPredictionsButton from '../components/CopyPreviousPredictionsButton';
 import PeriodFilterField from '../components/PeriodFilterField';
 import ExpensePredictionTable from '../components/ExpensePredictionTable/ExpensePredictionTable';
 import PeriodResultsTable from '../components/PeriodResultsTable/PeriodResultsTable';
 import PredictionAddModal from '../components/PredictionModal/PredictionAddModal';
 import StyledButton from '../../app_infrastructure/components/StyledButton';
 import AddIcon from '@mui/icons-material/Add';
-import PeriodStatuses from '../../periods/utils/PeriodStatuses';
 import { useNavigate } from 'react-router-dom';
 import InfoDialog from '../../app_infrastructure/components/InfoDialog';
 
@@ -40,7 +37,7 @@ const INFO_DIALOG_DATA = {
  */
 export default function ExpensePredictionsPage() {
   const navigate = useNavigate();
-  const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
+  const { contextWalletId } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
   const [periodResultsLoading, setPeriodResultsLoading] = useState(false);
   const [predictionsLoading, setPredictionsLoading] = useState(false);
@@ -49,7 +46,6 @@ export default function ExpensePredictionsPage() {
   const [periods, setPeriods] = useState([]);
   const [periodFilter, setPeriodFilter] = useState('');
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/expense_predictions/`;
-  // Data
   const [periodStatus, setPeriodStatus] = useState(0);
   const [periodStatusLabel, setPeriodStatusLabel] = useState(null);
 
@@ -80,28 +76,88 @@ export default function ExpensePredictionsPage() {
     getPeriodsChoices();
   }, [contextWalletId]);
 
-  // if (periodResultsLoading) {
-  //   return (
-  //     <Box display="flex" justifyContent="center">
-  //       <CircularProgress size="3rem" />
-  //     </Box>
-  //   );
-  // }
+  let pageContent;
 
-  // Prediction section establishing
-  let predictionSectionContent = (
-    <Stack
-      alignItems="center"
-      justifyContent="space-between"
-      spacing={1}
-      mt={2}
-      mb={1}
-    >
-      <Typography color="primary" fontWeight="bold">
-        Period not selected.
-      </Typography>
-    </Stack>
-  );
+  if (!periodFilter) {
+    pageContent = (
+      <Stack
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={1}
+        mt={2}
+        mb={1}
+      >
+        <Typography color="primary" fontWeight="bold">
+          Period not selected.
+        </Typography>
+      </Stack>
+    );
+  } else {
+    pageContent = (
+      <Box sx={{ position: 'relative' }}>
+        {(periodResultsLoading || predictionsLoading) && (
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(255, 255, 255, 0.6)',
+              zIndex: 10,
+            }}
+          >
+            <CircularProgress size="3rem" />
+          </Box>
+        )}
+        <Box sx={{ marginTop: 2 }}>
+          <Typography variant="h5" sx={{ display: 'block', color: '#BD0000' }}>
+            Period results
+          </Typography>
+          <Divider sx={{ mb: 1 }} />
+          <PeriodResultsTable
+            periodFilter={periodFilter}
+            setPeriodResultsLoading={setPeriodResultsLoading}
+          />
+        </Box>
+
+        {/* Predictions objects */}
+        <Box sx={{ marginTop: 2 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={1}
+            mt={2}
+            mb={1}
+          >
+            <Typography
+              variant="h5"
+              sx={{ display: 'block', color: '#BD0000' }}
+            >
+              Predictions
+            </Typography>
+            <StyledButton
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setAddFormOpen(true)}
+              disabled={!periodFilter}
+            >
+              Add
+            </StyledButton>
+          </Stack>
+          <Divider sx={{ mb: 1 }} />
+          <ExpensePredictionTable
+            periodFilter={periodFilter}
+            periodStatus={periodStatus}
+            setPredictionsLoading={setPredictionsLoading}
+            periodsCount={periods.length}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <>
       <Paper
@@ -158,69 +214,7 @@ export default function ExpensePredictionsPage() {
           </Stack>
         </Stack>
         <Divider />
-        {!periodFilter ? (
-          <Stack
-            alignItems="center"
-            justifyContent="space-between"
-            spacing={1}
-            mt={2}
-            mb={1}
-          >
-            <Typography color="primary" fontWeight="bold">
-              Period not selected.
-            </Typography>
-          </Stack>
-        ) : (
-          <>
-            {/* Users summaries */}
-            <Box sx={{ marginTop: 2 }}>
-              <Typography
-                variant="h5"
-                sx={{ display: 'block', color: '#BD0000' }}
-              >
-                Period results
-              </Typography>
-              <Divider sx={{ mb: 1 }} />
-              <PeriodResultsTable
-                periodFilter={periodFilter}
-                setPeriodResultsLoading={setPeriodResultsLoading}
-              />
-            </Box>
-            {/* Predictions objects */}
-            <Box sx={{ marginTop: 2 }}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                spacing={1}
-                mt={2}
-                mb={1}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{ display: 'block', color: '#BD0000' }}
-                >
-                  Predictions
-                </Typography>
-                <StyledButton
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() => setAddFormOpen(true)}
-                  disabled={!periodFilter}
-                >
-                  Add
-                </StyledButton>
-              </Stack>
-              <Divider sx={{ mb: 1 }} />
-              <ExpensePredictionTable
-                periodFilter={periodFilter}
-                periodStatus={periodStatus}
-                setPredictionsLoading={setPredictionsLoading}
-                periodsCount={periods.length}
-              />
-            </Box>
-          </>
-        )}
+        {pageContent}
       </Paper>
       <PredictionAddModal
         apiUrl={apiUrl}
