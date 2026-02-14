@@ -35,7 +35,10 @@ export default function BasePage() {
       <Navbar />
       <Stack direction="row" sx={{ minHeight: '100vh' }}>
         <Leftbar />
-        <Box component="main" sx={{ flex: 1, minWidth: 0, pt: 2, pl: 2, pr: 2}}>
+        <Box
+          component="main"
+          sx={{ flex: 1, minWidth: 0, pt: 2, pl: 2, pr: 2 }}
+        >
           <Outlet />
         </Box>
         <Rightbar />
