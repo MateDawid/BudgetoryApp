@@ -271,11 +271,8 @@ const TransferDataGrid = ({ transferType }) => {
    */
   useEffect(() => {
     const loadData = async () => {
-      if (!contextWalletId) {
-        setLoading(false);
-        return;
-      }
       try {
+        setLoading(true);
         const rowsResponse = await getApiObjectsList(
           apiUrl,
           paginationModel,

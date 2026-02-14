@@ -184,6 +184,7 @@ const EntityDataGrid = ({ entityType }) => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
         const rowsResponse = await getApiObjectsList(
           apiUrl,
           paginationModel,
