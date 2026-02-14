@@ -31,13 +31,12 @@ jobs:
         run: yarn install
 
       # 4. Run linter
-      - name: Run linter
+      - name: Run "yarn lint"
         run: yarn lint
 
       # 5. Audit dependencies
-      - name: Audit dependencies
+      - name: Run "yarn audit"
         run: yarn audit --level high
-        continue-on-error: true   # remove once you've resolved existing issues
 
       # 6. Trivy scan
       - name: Run Trivy
