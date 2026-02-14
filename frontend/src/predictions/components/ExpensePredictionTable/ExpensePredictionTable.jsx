@@ -226,14 +226,7 @@ export default function ExpensePredictionTable({
   if (periodFilter && predictions.length > 0)
     return (
       <Box>
-        <Stack
-          direction={{ sm: 'column', md: 'row' }}
-          alignItems={{ sm: 'flex-start', md: 'center' }}
-          justifyContent="flex-start"
-          spacing={1}
-          mb={1}
-          mt={1}
-        >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1, mt: 1 }}>
           <FilterField
             filterValue={depositFilter}
             setFilterValue={setDepositFilter}
@@ -293,7 +286,7 @@ export default function ExpensePredictionTable({
             disableClearable
             sx={{ width: { sm: '100%', md: 200 }, margin: 0 }}
           />
-        </Stack>
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>{header}</TableHead>
