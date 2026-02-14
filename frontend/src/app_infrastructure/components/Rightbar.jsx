@@ -50,10 +50,10 @@ const Rightbar = () => {
   }, [contextWalletId, refreshTimestamp]);
 
   return (
-    <Box width={240} sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
+    <Box width={220} sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>
       <Box
         position="fixed"
-        width={240}
+        width={220}
         pt={2}
         display="flex"
         justifyContent="center"

@@ -33,9 +33,9 @@ export default function BasePage() {
   return (
     <Box>
       <Navbar />
-      <Stack direction="row" justifyContent="space-between" spacing={1}>
+      <Stack direction="row" sx={{ minHeight: '100vh' }}>
         <Leftbar />
-        <Box flex={5} pt={2}>
+        <Box component="main" sx={{ flex: 1, minWidth: 0, pt: 2, pl: 2, pr: 2}}>
           <Outlet />
         </Box>
         <Rightbar />

@@ -23,7 +23,7 @@ const StyledListSubheader = styled(ListSubheader)({
 const Leftbar = () => {
   return (
     <Box
-      width={240}
+      width={180}
       height="100%"
       sx={{
         zIndex: 999,
