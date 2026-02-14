@@ -36,7 +36,13 @@ jobs:
 
       # 5. Audit dependencies
       - name: Run "yarn audit"
-        run: yarn audit --level high || true
+        run: |
+          yarn audit --level high --json \
+            | jq -e '
+                select(.type == "auditSummary")
+                | .data.vulnerabilities
+                | (.high // 0) + (.critical // 0) == 0
+              ' > /dev/null
 
       # 6. Trivy scan
       - name: Run Trivy
