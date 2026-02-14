@@ -29,12 +29,26 @@ jobs:
       # 3. Install dependencies
       - name: Install dependencies
         run: yarn install
-      
+
       # 4. Run linter
       - name: Run linter
         run: yarn lint
+
+      # 5. Audit dependencies
+      - name: Audit dependencies
+        run: yarn audit --level high
+        continue-on-error: true   # remove once you've resolved existing issues
+
+      # 6. Trivy scan
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.34.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL,HIGH
+          exit-code: 1
       
-      # 5. Run tests with JUnit reporter
+      # 7. Run tests with JUnit reporter
       - name: Run tests
         run: yarn test -- --coverage --watchAll=false --reporters=default --reporters=jest-junit
         env:
@@ -43,7 +57,7 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: ./
           JEST_JUNIT_OUTPUT_NAME: junit.xml
       
-      # 6. Publish test results to GitHub UI
+      # 8. Publish test results to GitHub UI
       - name: Publish test results
         uses: dorny/test-reporter@v1
         if: always()
