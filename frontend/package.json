@@ -60,7 +60,6 @@
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
     "@faker-js/faker": "^9.2.0",
-    "cypress": "^13.16.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-react-app": "^7.0.1",
