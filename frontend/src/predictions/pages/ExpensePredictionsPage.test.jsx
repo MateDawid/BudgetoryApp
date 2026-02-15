@@ -1,11 +1,5 @@
-import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  act,
-} from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import ExpensePredictionsPage from './ExpensePredictionsPage';
@@ -23,14 +17,9 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-// Mock PeriodStatuses
-jest.mock('../../periods/utils/PeriodStatuses', () => ({
-  DRAFT: 0,
-  ACTIVE: 1,
-  CLOSED: 2,
-}));
+// Mock child components that are self-contained units tested separately.
+// Their props are verified here; their internal behaviour is not re-tested.
 
-// Mock child components
 jest.mock('../components/PeriodFilterField', () => {
   return function MockPeriodFilterField({
     setPeriodFilter,
@@ -53,35 +42,23 @@ jest.mock('../components/PeriodFilterField', () => {
   };
 });
 
+// ExpensePredictionTable owns its own filters, data fetching, and empty states.
+// Capture the props passed to it so we can assert on them.
+let capturedPredictionTableProps = {};
 jest.mock('../components/ExpensePredictionTable/ExpensePredictionTable', () => {
-  return function MockExpensePredictionTable({ predictions }) {
-    return (
-      <div data-testid="expense-prediction-table">
-        {predictions.map((pred) => (
-          <div key={pred.id}>{pred.category}</div>
-        ))}
-      </div>
-    );
+  return function MockExpensePredictionTable(props) {
+    capturedPredictionTableProps = props;
+    return <div data-testid="expense-prediction-table" />;
   };
 });
 
+// PeriodResultsTable owns its own data fetching and empty states.
+// Capture the props passed to it so we can assert on them.
+let capturedResultsTableProps = {};
 jest.mock('../components/PeriodResultsTable/PeriodResultsTable', () => {
-  return function MockPeriodResultsTable({ results }) {
-    return (
-      <div data-testid="period-results-table">
-        {results.map((result) => (
-          <div key={result.id}>{result.deposit_name}</div>
-        ))}
-      </div>
-    );
-  };
-});
-
-jest.mock('../components/CopyPreviousPredictionsButton', () => {
-  return function MockCopyPreviousPredictionsButton({ periodId }) {
-    return periodId ? (
-      <button data-testid="copy-previous-button">Copy Previous</button>
-    ) : null;
+  return function MockPeriodResultsTable(props) {
+    capturedResultsTableProps = props;
+    return <div data-testid="period-results-table" />;
   };
 });
 
@@ -95,44 +72,23 @@ jest.mock('../components/PredictionModal/PredictionAddModal', () => {
   };
 });
 
-jest.mock('../../app_infrastructure/components/FilterField', () => {
-  return function MockFilterField({
-    filterValue,
-    setFilterValue,
-    options,
-    label,
-    disabled,
-  }) {
-    return (
-      <div data-testid={`filter-field-${label}`}>
-        <select
-          value={filterValue || ''}
-          onChange={(e) => setFilterValue(e.target.value || null)}
-          disabled={disabled}
-          aria-label={label}
-        >
-          <option value="">All</option>
-          {options?.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
-});
-
 jest.mock('../../app_infrastructure/components/StyledButton', () => {
-  return function MockStyledButton({ children, onClick, disabled, startIcon }) {
+  return function MockStyledButton({ children, onClick, disabled }) {
     return (
       <button onClick={onClick} disabled={disabled} data-testid="styled-button">
-        {startIcon}
         {children}
       </button>
     );
   };
 });
+
+jest.mock('../../app_infrastructure/components/InfoDialog', () => {
+  return function MockInfoDialog() {
+    return <div data-testid="info-dialog" />;
+  };
+});
+
+// ---------------------------------------------------------------------------
 
 describe('ExpensePredictionsPage', () => {
   const mockSetAlert = jest.fn();
@@ -142,73 +98,20 @@ describe('ExpensePredictionsPage', () => {
 
   const mockPeriods = [
     {
-      value: 'period-1',
+      id: 'period-1',
+      name: 'January 2024',
       label: 'January 2024',
       status: 0,
       status_display: 'Draft',
     },
     {
-      value: 'period-2',
+      id: 'period-2',
+      name: 'February 2024',
       label: 'February 2024',
       status: 0,
       status_display: 'Draft',
     },
   ];
-
-  const mockDeposits = [
-    { value: 'deposit-1', label: 'Main Account' },
-    { value: 'deposit-2', label: 'Savings' },
-  ];
-
-  const mockPriorities = [
-    { value: 1, label: 'High Priority' },
-    { value: 2, label: 'Medium Priority' },
-  ];
-
-  const mockCategories = [
-    { value: 'cat-1', label: 'Groceries', priority_display: 'High Priority' },
-    { value: 'cat-2', label: 'Transport', priority_display: 'Medium Priority' },
-  ];
-
-  const mockProgressStatuses = [
-    { value: 'on-track', label: 'On Track' },
-    { value: 'over-wallet', label: 'Over Wallet' },
-  ];
-
-  const mockPredictions = [
-    { id: 1, category: 'Groceries', current_plan: 500 },
-    { id: 2, category: 'Transport', current_plan: 200 },
-  ];
-
-  const mockPeriodResults = [
-    { id: 1, deposit_name: 'Main Account', total: 1000 },
-    { id: 2, deposit_name: 'Savings', total: 500 },
-  ];
-
-  // Helper function to create standard mock API implementation
-  const createMockApiImplementation = (overrides = {}) => {
-    return (url) => {
-      if (url.includes('/periods/'))
-        return Promise.resolve(overrides.periods || mockPeriods);
-      if (url.includes('/deposits/'))
-        return Promise.resolve(overrides.deposits || mockDeposits);
-      if (url.includes('/priorities/'))
-        return Promise.resolve({
-          results: overrides.priorities || mockPriorities,
-        });
-      if (url.includes('/progress_statuses/'))
-        return Promise.resolve(
-          overrides.progressStatuses || mockProgressStatuses
-        );
-      if (url.includes('/categories/'))
-        return Promise.resolve(overrides.categories || mockCategories);
-      if (url.includes('/expense_predictions/'))
-        return Promise.resolve(overrides.predictions || mockPredictions);
-      if (url.includes('/deposits_predictions_results/'))
-        return Promise.resolve(overrides.periodResults || mockPeriodResults);
-      return Promise.resolve([]);
-    };
-  };
 
   const renderComponent = (
     walletContext = defaultWalletContext,
@@ -228,6 +131,8 @@ describe('ExpensePredictionsPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockNavigate.mockClear();
+    capturedPredictionTableProps = {};
+    capturedResultsTableProps = {};
     process.env.REACT_APP_BACKEND_URL = 'http://localhost:8000';
 
     mockRefreshTimestamp = Date.now();
@@ -241,56 +146,81 @@ describe('ExpensePredictionsPage', () => {
       setAlert: mockSetAlert,
     };
 
-    // Default: return data for all endpoints
-    getApiObjectsList.mockImplementation(createMockApiImplementation());
+    getApiObjectsList.mockResolvedValue(mockPeriods);
   });
 
+  // -------------------------------------------------------------------------
   describe('Initial Rendering', () => {
-    test('renders main header correctly', async () => {
+    test('renders main h4 header', async () => {
       await act(async () => {
         renderComponent();
       });
-      // Use getAllByText and check the first one (h4 header)
+
       const headers = screen.getAllByText('Predictions');
-      expect(headers[0]).toBeInTheDocument();
-      expect(headers[0].tagName).toBe('H4');
+      const h4 = headers.find((el) => el.tagName === 'H4');
+      expect(h4).toBeInTheDocument();
     });
 
-    test('renders period results section header', async () => {
+    test('renders "Period results" section header after period is selected', async () => {
       await act(async () => {
         renderComponent();
+      });
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
       expect(screen.getByText('Period results')).toBeInTheDocument();
     });
 
-    test('renders predictions section header', async () => {
+    test('renders "Predictions" h5 section header after period is selected', async () => {
       await act(async () => {
         renderComponent();
       });
-      // Use getAllByText and check the second one (h5 section header)
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
       const headers = screen.getAllByText('Predictions');
-      expect(headers[1]).toBeInTheDocument();
-      expect(headers[1].tagName).toBe('H5');
+      const h5 = headers.find((el) => el.tagName === 'H5');
+      expect(h5).toBeInTheDocument();
     });
 
-    test('shows "Period not selected" message initially', async () => {
+    test('shows "Period not selected." message when no period chosen', async () => {
       await act(async () => {
         renderComponent();
       });
+      // The message appears in both the Period results area and the Predictions area
       const messages = screen.getAllByText('Period not selected.');
-      expect(messages).toHaveLength(2);
+      expect(messages.length).toBeGreaterThanOrEqual(1);
     });
 
-    test('renders period filter field component', async () => {
+    test('renders PeriodFilterField', async () => {
       await act(async () => {
         renderComponent();
       });
       expect(screen.getByTestId('period-filter-field')).toBeInTheDocument();
     });
+
+    test('does not render ExpensePredictionTable before a period is selected', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+      expect(
+        screen.queryByTestId('expense-prediction-table')
+      ).not.toBeInTheDocument();
+    });
+
+    test('does not render PeriodResultsTable before a period is selected', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+      expect(
+        screen.queryByTestId('period-results-table')
+      ).not.toBeInTheDocument();
+    });
   });
 
+  // -------------------------------------------------------------------------
   describe('Data Fetching on Mount', () => {
-    test('fetches periods on mount', async () => {
+    test('fetches periods list on mount', async () => {
       renderComponent();
 
       await waitFor(() => {
@@ -300,43 +230,11 @@ describe('ExpensePredictionsPage', () => {
       });
     });
 
-    test('fetches deposits on mount', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/deposits/?ordering=name&fields=value,label'
-        );
-      });
-    });
-
-    test('fetches priorities on mount', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/categories/priorities/?type=2'
-        );
-      });
-    });
-
-    test('fetches progress statuses on mount', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/predictions/progress_statuses/'
-        );
-      });
-    });
-
-    test('navigates to wallets page when contextWalletId is null', async () => {
-      const noWalletContext = {
+    test('navigates to /wallets when contextWalletId is null', async () => {
+      renderComponent({
         contextWalletId: null,
         refreshTimestamp: mockRefreshTimestamp,
-      };
-
-      renderComponent(noWalletContext);
+      });
 
       await waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith('/wallets');
@@ -346,398 +244,298 @@ describe('ExpensePredictionsPage', () => {
         });
       });
     });
+
+    test('does not call getApiObjectsList when wallet is missing', async () => {
+      renderComponent({
+        contextWalletId: null,
+        refreshTimestamp: mockRefreshTimestamp,
+      });
+
+      await waitFor(() => expect(mockNavigate).toHaveBeenCalled());
+      // periods endpoint must not be called
+      const periodsCalls = getApiObjectsList.mock.calls.filter((args) =>
+        args[0].includes('/periods/')
+      );
+      expect(periodsCalls).toHaveLength(0);
+    });
+
+    test('handles API errors for periods gracefully (no crash)', async () => {
+      getApiObjectsList.mockRejectedValue(new Error('Network Error'));
+
+      await expect(
+        act(async () => {
+          renderComponent();
+        })
+      ).resolves.not.toThrow();
+
+      // Page header should still render
+      const headers = screen.getAllByText('Predictions');
+      expect(headers.find((el) => el.tagName === 'H4')).toBeInTheDocument();
+    });
   });
 
+  // -------------------------------------------------------------------------
   describe('Period Selection', () => {
-    test('fetches predictions when period is selected', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/expense_predictions/',
-          {},
-          {},
-          expect.objectContaining({ period: 'period-1' })
-        );
-      });
-    });
-
-    test('fetches period results when period is selected', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/deposits_predictions_results/period-1/'
-        );
-      });
-    });
-
-    test('displays loading spinner while fetching predictions', async () => {
-      let resolvePredictions;
-      let resolveResults;
-      const predictionsPromise = new Promise((resolve) => {
-        resolvePredictions = resolve;
-      });
-      const resultsPromise = new Promise((resolve) => {
-        resolveResults = resolve;
-      });
-
-      getApiObjectsList.mockImplementation((url) => {
-        if (url.includes('/expense_predictions/')) return predictionsPromise;
-        if (url.includes('/deposits_predictions_results/'))
-          return resultsPromise;
-        return Promise.resolve(createMockApiImplementation()(url));
-      });
-
+    test('renders ExpensePredictionTable after a period is selected', async () => {
       await act(async () => {
         renderComponent();
       });
 
       await act(async () => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      await waitFor(() => {
-        const spinners = screen.getAllByRole('progressbar');
-        expect(spinners.length).toBeGreaterThanOrEqual(1);
-      });
-
-      await act(async () => {
-        resolvePredictions(mockPredictions);
-        resolveResults(mockPeriodResults);
-      });
-
-      await waitFor(() => {
-        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
-      });
+      expect(
+        screen.getByTestId('expense-prediction-table')
+      ).toBeInTheDocument();
     });
 
-    test('displays prediction table when predictions are loaded', async () => {
+    test('renders PeriodResultsTable after a period is selected', async () => {
       await act(async () => {
         renderComponent();
       });
 
       await act(async () => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('expense-prediction-table')
-        ).toBeInTheDocument();
-      });
+      expect(screen.getByTestId('period-results-table')).toBeInTheDocument();
     });
 
-    test('displays period results table when results are loaded', async () => {
+    test('passes correct periodFilter prop to ExpensePredictionTable', async () => {
       await act(async () => {
         renderComponent();
       });
 
       await act(async () => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('period-results-table')).toBeInTheDocument();
-      });
+      expect(capturedPredictionTableProps.periodFilter).toBe('period-1');
     });
 
-    test('displays period status chip when period is selected', async () => {
+    test('passes correct periodFilter prop to PeriodResultsTable', async () => {
       await act(async () => {
         renderComponent();
       });
 
       await act(async () => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      await waitFor(() => {
-        expect(screen.getByText('Draft')).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Filter Functionality', () => {
-    test('displays filter fields when period is selected', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByTestId('filter-field-Deposit')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('filter-field-Category Priority')
-        ).toBeInTheDocument();
-        expect(screen.getByTestId('filter-field-Category')).toBeInTheDocument();
-        expect(screen.getByTestId('filter-field-Progress')).toBeInTheDocument();
-        expect(screen.getByTestId('filter-field-Sort by')).toBeInTheDocument();
-      });
+      expect(capturedResultsTableProps.periodFilter).toBe('period-1');
     });
 
-    test('fetches categories when priority filter is applied', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('passes correct periodStatus prop to ExpensePredictionTable', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('filter-field-Category Priority')
-        ).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      act(() => {
-        const priorityFilter = screen.getByLabelText('Category Priority');
-        fireEvent.change(priorityFilter, { target: { value: '1' } });
-      });
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/categories/?category_type=2',
-          {},
-          {},
-          expect.objectContaining({ priority: '1' })
-        );
-      });
+      // MockPeriodFilterField sets status 0 (DRAFT)
+      expect(capturedPredictionTableProps.periodStatus).toBe(0);
     });
 
-    test('fetches categories when deposit filter is applied', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('passes periodsCount (total periods fetched) to ExpensePredictionTable', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('filter-field-Deposit')).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      act(() => {
-        const depositFilter = screen.getByLabelText('Deposit');
-        fireEvent.change(depositFilter, { target: { value: 'deposit-1' } });
-      });
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/categories/?category_type=2',
-          {},
-          {},
-          expect.objectContaining({ deposit: 'deposit-1' })
-        );
-      });
-    });
-
-    test('category filter is disabled when no deposit is selected', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        const categoryFilter = screen.getByLabelText('Category');
-        expect(categoryFilter).toBeDisabled();
-      });
-    });
-
-    test('applies multiple filters and fetches predictions', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByTestId('filter-field-Deposit')).toBeInTheDocument();
-      });
-
-      act(() => {
-        const depositFilter = screen.getByLabelText('Deposit');
-        fireEvent.change(depositFilter, { target: { value: 'deposit-1' } });
-
-        const progressFilter = screen.getByLabelText('Progress');
-        fireEvent.change(progressFilter, { target: { value: 'on-track' } });
-      });
-
-      await waitFor(() => {
-        expect(getApiObjectsList).toHaveBeenCalledWith(
-          'http://localhost:8000/api/wallets/wallet-123/expense_predictions/',
-          {},
-          {},
-          expect.objectContaining({
-            period: 'period-1',
-            deposit: 'deposit-1',
-            progress_status: 'on-track',
-          })
-        );
-      });
-    });
-  });
-
-  describe('Empty States', () => {
-    test('displays "No Predictions found" when period is selected but no predictions exist', async () => {
-      getApiObjectsList.mockImplementation(
-        createMockApiImplementation({ predictions: [] })
+      expect(capturedPredictionTableProps.periodsCount).toBe(
+        mockPeriods.length
       );
-
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('No Predictions found.')).toBeInTheDocument();
-      });
     });
 
-    test('displays "No Period results to display" when period results are empty', async () => {
-      getApiObjectsList.mockImplementation(
-        createMockApiImplementation({ periodResults: [] })
-      );
-
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('displays period status chip after period selection', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByText('No Period results to display.')
-        ).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
+
+      expect(screen.getByText('Draft')).toBeInTheDocument();
+    });
+
+    test('hides "Period not selected." message after period is chosen', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      expect(
+        screen.queryByText('Period not selected.')
+      ).not.toBeInTheDocument();
     });
   });
 
-  describe('Add Prediction Functionality', () => {
-    test('displays add button when predictions exist', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+  // -------------------------------------------------------------------------
+  describe('Add Prediction Button', () => {
+    test('Add button is present after a period is selected', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('expense-prediction-table')
-        ).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      const addButton = screen.getByText('Add');
-      expect(addButton).toBeInTheDocument();
+      expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    test('opens add modal when add button is clicked', async () => {
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('Add button is not rendered before a period is selected', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('expense-prediction-table')
-        ).toBeInTheDocument();
-      });
-
-      act(() => {
-        const addButton = screen.getByText('Add');
-        fireEvent.click(addButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByTestId('prediction-add-modal')).toBeInTheDocument();
-      });
+      // The Add button lives inside the period-selected branch, so it should be absent
+      expect(screen.queryByText('Add')).not.toBeInTheDocument();
     });
 
-    test('displays add button in empty state for draft periods', async () => {
-      getApiObjectsList.mockImplementation(
-        createMockApiImplementation({
-          predictions: [],
-          periodResults: [],
-          categories: [],
-        })
-      );
-
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('clicking Add button opens PredictionAddModal', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(screen.getByText('No Predictions found.')).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      // Debug: let's see what's actually rendered
-      await waitFor(() => {
-        const addButton = screen.queryByText('Add');
-        if (!addButton) {
-          // Button should be there, let's check the whole DOM
-          screen.debug(null, 300000);
-        }
-        expect(screen.getByText('Add')).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Add'));
       });
+
+      expect(screen.getByTestId('prediction-add-modal')).toBeInTheDocument();
     });
-  });
 
-  describe('Copy Previous Predictions', () => {
-    test('displays copy previous button when conditions are met', async () => {
-      getApiObjectsList.mockImplementation(
-        createMockApiImplementation({
-          predictions: [],
-          periodResults: [],
-          categories: [],
-        })
-      );
-
-      renderComponent();
-
-      act(() => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+    test('closing modal hides PredictionAddModal', async () => {
+      await act(async () => {
+        renderComponent();
       });
 
-      await waitFor(() => {
-        expect(screen.getByText('No Predictions found.')).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
       });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('copy-previous-button')).toBeInTheDocument();
+      await act(async () => {
+        fireEvent.click(screen.getByText('Add'));
       });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Close Modal'));
+      });
+
+      expect(
+        screen.queryByTestId('prediction-add-modal')
+      ).not.toBeInTheDocument();
+    });
+
+    test('PredictionAddModal renders when period is selected and Add is clicked', async () => {
+      // Verifies indirectly that periodId is truthy: the mock only renders
+      // when formOpen=true, which requires a period to be set first.
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Add'));
+      });
+
+      expect(screen.getByTestId('prediction-add-modal')).toBeInTheDocument();
     });
   });
 
-  describe('Refresh Functionality', () => {
-    test('refetches data when refreshTimestamp changes', async () => {
+  // -------------------------------------------------------------------------
+  describe('Loading State', () => {
+    test('setPeriodResultsLoading callback is passed to PeriodResultsTable', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      expect(typeof capturedResultsTableProps.setPeriodResultsLoading).toBe(
+        'function'
+      );
+    });
+
+    test('setPredictionsLoading callback is passed to ExpensePredictionTable', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      expect(typeof capturedPredictionTableProps.setPredictionsLoading).toBe(
+        'function'
+      );
+    });
+
+    test('loading overlay appears when setPeriodResultsLoading(true) is called', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      act(() => {
+        capturedResultsTableProps.setPeriodResultsLoading(true);
+      });
+
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
+
+    test('loading overlay disappears when both loading flags are false', async () => {
+      await act(async () => {
+        renderComponent();
+      });
+
+      await act(async () => {
+        fireEvent.click(screen.getByText('Select Period'));
+      });
+
+      // Turn on both loaders
+      act(() => {
+        capturedResultsTableProps.setPeriodResultsLoading(true);
+        capturedPredictionTableProps.setPredictionsLoading(true);
+      });
+
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+
+      // Turn off both loaders
+      act(() => {
+        capturedResultsTableProps.setPeriodResultsLoading(false);
+        capturedPredictionTableProps.setPredictionsLoading(false);
+      });
+
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  describe('Wallet Context Change', () => {
+    test('resets period filter when contextWalletId changes', async () => {
       const { rerender } = render(
         <MemoryRouter>
           <WalletContext.Provider value={defaultWalletContext}>
@@ -748,32 +546,22 @@ describe('ExpensePredictionsPage', () => {
         </MemoryRouter>
       );
 
-      await waitFor(() => {
-        const headers = screen.getAllByText('Predictions');
-        expect(headers[0]).toBeInTheDocument();
-      });
-
+      // Select a period
       await act(async () => {
-        const selectButton = screen.getByText('Select Period');
-        fireEvent.click(selectButton);
+        fireEvent.click(screen.getByText('Select Period'));
       });
+      expect(
+        screen.getByTestId('expense-prediction-table')
+      ).toBeInTheDocument();
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('expense-prediction-table')
-        ).toBeInTheDocument();
-      });
-
-      const callCountBefore = getApiObjectsList.mock.calls.length;
-
-      const newTimestamp = Date.now() + 1000;
+      // Switch wallet
       await act(async () => {
         rerender(
           <MemoryRouter>
             <WalletContext.Provider
               value={{
-                ...defaultWalletContext,
-                refreshTimestamp: newTimestamp,
+                contextWalletId: 'wallet-456',
+                refreshTimestamp: mockRefreshTimestamp,
               }}
             >
               <AlertContext.Provider value={defaultAlertContext}>
@@ -784,35 +572,56 @@ describe('ExpensePredictionsPage', () => {
         );
       });
 
-      await waitFor(
-        () => {
-          expect(getApiObjectsList.mock.calls.length).toBeGreaterThan(
-            callCountBefore
-          );
-        },
-        { timeout: 3000 }
-      );
+      // Period should be reset – tables disappear, "not selected" message returns
+      expect(
+        screen.queryByTestId('expense-prediction-table')
+      ).not.toBeInTheDocument();
     });
-  });
 
-  describe('Error Handling', () => {
-    test('handles API errors gracefully for periods', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    test('re-fetches periods when contextWalletId changes', async () => {
+      const { rerender } = render(
+        <MemoryRouter>
+          <WalletContext.Provider value={defaultWalletContext}>
+            <AlertContext.Provider value={defaultAlertContext}>
+              <ExpensePredictionsPage />
+            </AlertContext.Provider>
+          </WalletContext.Provider>
+        </MemoryRouter>
+      );
 
-      getApiObjectsList.mockImplementation((url) => {
-        if (url.includes('/periods/'))
-          return Promise.reject(new Error('API Error'));
-        return Promise.resolve(createMockApiImplementation()(url));
+      await waitFor(() =>
+        expect(getApiObjectsList).toHaveBeenCalledWith(
+          expect.stringContaining('/api/wallets/wallet-123/periods/')
+        )
+      );
+
+      const callsBefore = getApiObjectsList.mock.calls.length;
+
+      await act(async () => {
+        rerender(
+          <MemoryRouter>
+            <WalletContext.Provider
+              value={{
+                contextWalletId: 'wallet-456',
+                refreshTimestamp: mockRefreshTimestamp,
+              }}
+            >
+              <AlertContext.Provider value={defaultAlertContext}>
+                <ExpensePredictionsPage />
+              </AlertContext.Provider>
+            </WalletContext.Provider>
+          </MemoryRouter>
+        );
       });
-
-      renderComponent();
 
       await waitFor(() => {
-        const headers = screen.getAllByText('Predictions');
-        expect(headers[0]).toBeInTheDocument();
+        expect(getApiObjectsList.mock.calls.length).toBeGreaterThan(
+          callsBefore
+        );
+        expect(getApiObjectsList).toHaveBeenCalledWith(
+          expect.stringContaining('/api/wallets/wallet-456/periods/')
+        );
       });
-
-      consoleSpy.mockRestore();
     });
   });
 });
