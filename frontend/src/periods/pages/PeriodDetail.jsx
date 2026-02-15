@@ -11,6 +11,7 @@ import PeriodStatusUpdateButton from '../components/PeriodStatusUpdateButton';
 import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldSave';
 import TopEntitiesInPeriodChart from '../../charts/components/TopEntitiesInPeriodChart';
 import { WalletContext } from '../../app_infrastructure/store/WalletContext';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  *  PeriodDetail component to display details of single  Period.
@@ -23,12 +24,14 @@ export default function PeriodDetail() {
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/periods/`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   /**
    * Fetches  Period detail from API.
    */
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const apiResponse = await getApiObjectDetails(apiUrl, id, [
           'name',
@@ -42,6 +45,8 @@ export default function PeriodDetail() {
       } catch {
         setAlert({ type: 'error', message: 'Period details loading failed.' });
         navigate('/periods');
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -70,6 +75,14 @@ export default function PeriodDetail() {
       setAlert
     );
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Paper
@@ -108,7 +121,7 @@ export default function PeriodDetail() {
           {objectData.status === PeriodStatuses.DRAFT && (
             <PeriodStatusUpdateButton
               apiUrl={apiUrl}
-              objectId={objectData.id}
+              objectId={id}
               newPeriodStatus={PeriodStatuses.ACTIVE}
               objectName={objectData.name}
             />
@@ -116,14 +129,14 @@ export default function PeriodDetail() {
           {objectData.status === PeriodStatuses.ACTIVE && (
             <PeriodStatusUpdateButton
               apiUrl={apiUrl}
-              objectId={objectData.id}
+              objectId={id}
               newPeriodStatus={PeriodStatuses.CLOSED}
               objectName={objectData.name}
             />
           )}
           <DeleteButton
             apiUrl={apiUrl}
-            objectId={objectData.id}
+            objectId={id}
             objectDisplayName="Period"
             redirectOnSuccess={'/periods'}
             isDisabled={objectData.status !== 1}
