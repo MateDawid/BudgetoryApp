@@ -13,6 +13,8 @@ import DeleteButton from '../../app_infrastructure/components/DeleteButton';
 import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldSave';
 import CategoryResultsAndPredictionsInPeriodsChart from '../../charts/components/CategoryResultsAndPredictionsInPeriodsChart';
 import CategoryTypes from '../utils/CategoryTypes';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 /**
  * TransferCategoryDetail component to display details of single Transfer Category.
@@ -28,9 +30,11 @@ export default function TransferCategoryDetail() {
   const [typeOptions, setTypeOptions] = useState([]);
   const [priorityOptions, setPriorityOptions] = useState([]);
   const [depositOptions, setDepositOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const apiResponse = await getApiObjectDetails(apiUrl, id);
         setObjectData(apiResponse);
@@ -41,6 +45,8 @@ export default function TransferCategoryDetail() {
           message: 'Category details loading failed.',
         });
         navigate('/categories');
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -101,6 +107,14 @@ export default function TransferCategoryDetail() {
       setAlert
     );
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Paper
