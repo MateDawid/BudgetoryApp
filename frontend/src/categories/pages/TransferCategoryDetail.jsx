@@ -15,7 +15,6 @@ import CategoryResultsAndPredictionsInPeriodsChart from '../../charts/components
 import CategoryTypes from '../utils/CategoryTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 /**
  * TransferCategoryDetail component to display details of single Transfer Category.
  */

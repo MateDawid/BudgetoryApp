@@ -11,7 +11,6 @@ import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldS
 import TransfersInPeriodsChart from '../../charts/components/TransfersInPeriodsChart';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 /**
  * DepositDetail component to display details of single Deposit.
  */
