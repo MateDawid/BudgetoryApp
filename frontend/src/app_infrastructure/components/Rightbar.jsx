@@ -15,7 +15,8 @@ import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../store/WalletContext';
 import { AlertContext } from '../store/AlertContext';
 import { getApiObjectsList } from '../services/APIService';
-
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import StyledButton from './StyledButton';
 /**
  * Rightbar component to display WalletSelector and Deposits balances on right side of screen
  */
@@ -54,10 +55,14 @@ const Rightbar = () => {
       <Box
         position="fixed"
         width={220}
+        height="calc(100vh - 64px)" // account for Navbar height
         pt={2}
         display="flex"
-        justifyContent="center"
+        flexDirection="column" // ← stack children vertically
+        alignItems="center"
+        justifyContent="space-between" // ← push Feedback to bottom
       >
+        {/* existing Card with wallet/deposits */}
         <Card>
           <Box
             width={220}
@@ -97,9 +102,18 @@ const Rightbar = () => {
             </List>
           </Box>
         </Card>
+        <Box mb={2} width="100%" display="flex" justifyContent="flex-end">
+          <StyledButton
+            variant="outlined"
+            href="https://github.com/MateDawid/Budgetory_Backend/issues/new"
+            target="_blank"
+            startIcon={<FeedbackIcon />}
+          >
+            Feedback
+          </StyledButton>
+        </Box>
       </Box>
     </Box>
   );
 };
-
 export default Rightbar;

@@ -14,13 +14,13 @@ const StyledButton = styled(Button)(({ variant }) => ({
     },
   }),
   ...(variant === 'outlined' && {
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFFFFF',
     color: '#BD0000',
     borderColor: '#BD0000',
     '&:hover': {
       backgroundColor: '#BD0000',
       color: '#FFFFFF',
-      borderColor: '#FFFFFF',
+      borderColor: '#BD0000',
     },
   }),
 }));
