@@ -33,11 +33,8 @@ function LandingPage() {
    */
   useEffect(() => {
     async function getWallets() {
-      if (!contextWalletId) {
-        return;
-      }
-
       try {
+        setLoading(true);
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?ordering=name&fields=id,name,deposits_count,balance,currency_name`
         );
@@ -52,7 +49,7 @@ function LandingPage() {
       }
     }
     getWallets();
-  }, [contextWalletId]);
+  }, []);
 
   return (
     <Grid container spacing={2}>
@@ -61,7 +58,7 @@ function LandingPage() {
           <CircularProgress size="3rem" />
         </Grid>
       )}
-      {(!loading && wallets.length) === 0 && (
+      {!loading && wallets.length === 0 && (
         <Grid size={12} display="flex" justifyContent="center" width="100%">
           <Paper
             elevation={24}
