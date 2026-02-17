@@ -8,12 +8,11 @@ import { getApiObjectsList } from '../services/APIService';
  */
 const WalletSelector = () => {
   const {
-    getContextWalletId,
+    contextWalletId,
     setContextWalletId,
     setContextWalletCurrency,
     refreshTimestamp,
   } = useContext(WalletContext);
-  const loadedWalletId = getContextWalletId();
   const [wallets, setWallets] = useState([]);
   const [selectedWallet, setSelectedWallet] = useState('');
 
@@ -37,7 +36,7 @@ const WalletSelector = () => {
           return;
         }
         const contextWallet = apiResponse.find(
-          (wallet) => wallet.id === loadedWalletId
+          (wallet) => wallet.id === contextWalletId
         );
         if (contextWallet) {
           setSelectedWallet(contextWallet);

@@ -8,6 +8,7 @@ import FilterField from '../../app_infrastructure/components/FilterField';
 import CategoryTypes from '../../categories/utils/CategoryTypes';
 import { DepositChoicesContext } from '../../app_infrastructure/store/DepositChoicesContext';
 import { PeriodChoicesContext } from '../../app_infrastructure/store/PeriodChoicesContext';
+import { LoadingOverlay } from './LoadingOverlay';
 
 const TRANSFER_TYPES = [
   { label: 'Expenses', value: CategoryTypes.EXPENSE },
@@ -26,9 +27,7 @@ const ENTITIES_ON_CHART = [
  * @param {string} [props.periodId] - Optional Period ID value.
  */
 export default function TopEntitiesInPeriodChart({ periodId = null }) {
-  const { getContextWalletId, contextWalletCurrency } =
-    useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   const { depositChoices } = useContext(DepositChoicesContext);
   const { periodChoices } = useContext(PeriodChoicesContext);
 
@@ -40,6 +39,7 @@ export default function TopEntitiesInPeriodChart({ periodId = null }) {
   // Chart data
   const [xAxis, setXAxis] = useState([]);
   const [series, setSeries] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const valueFormatter = (value) =>
     value
@@ -50,12 +50,16 @@ export default function TopEntitiesInPeriodChart({ periodId = null }) {
    * Set initial value for Period filter.
    */
   useEffect(() => {
-    if (!periodId && periodChoices.length > 0) setPeriod(periodChoices[0].id);
+    if (!periodId && periodChoices.length > 0)
+      setPeriod(periodChoices[0].value);
   }, [periodChoices]);
 
   useEffect(() => {
     const loadEntitiesResults = async () => {
       try {
+        setLoading(true);
+        setXAxis([]);
+        setSeries([]);
         const filterModel = {};
         if (periodId) filterModel['period'] = periodId;
         if (period) filterModel['period'] = period;
@@ -80,6 +84,8 @@ export default function TopEntitiesInPeriodChart({ periodId = null }) {
       } catch {
         setXAxis([]);
         setSeries([]);
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId || (!periodId && !period)) {
@@ -130,6 +136,8 @@ export default function TopEntitiesInPeriodChart({ periodId = null }) {
         yAxis={[{ valueFormatter: (v) => v.toString() }]}
         height={300}
         series={series}
+        loading={loading}
+        slots={{ loadingOverlay: LoadingOverlay }}
         slotProps={{
           legend: {
             direction: 'horizontal',

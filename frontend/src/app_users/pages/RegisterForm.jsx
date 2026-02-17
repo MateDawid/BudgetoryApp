@@ -140,20 +140,6 @@ function RegisterForm() {
             helperText={formErrors.email ? formErrors.email : ''}
           />
           <TextField
-            data-cy="username-field"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Username"
-            autoComplete="username"
-            {...register('username', {
-              required: 'Username is required',
-            })}
-            error={!!formErrors.username}
-            helperText={formErrors.username ? formErrors.username : ''}
-          />
-          <TextField
             data-cy="password-1-field"
             variant="outlined"
             margin="normal"

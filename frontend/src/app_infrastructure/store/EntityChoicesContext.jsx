@@ -8,12 +8,14 @@ export const EntityChoicesContext = createContext();
  * EntityChoicesProvider for storing choices fields options for EntityChoices purposes.
  */
 export const EntityChoicesProvider = ({ children }) => {
-  const { getContextWalletId } = useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId } = useContext(WalletContext);
   const [entityChoices, setEntityChoices] = useState([]);
 
   useEffect(() => {
     const loadEntityChoices = async () => {
+      if (!contextWalletId) {
+        return;
+      }
       try {
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/entities/?ordering=-is_deposit,name`
@@ -23,9 +25,7 @@ export const EntityChoicesProvider = ({ children }) => {
         setEntityChoices([]);
       }
     };
-    if (!contextWalletId) {
-      return;
-    }
+
     loadEntityChoices();
   }, [contextWalletId]);
 

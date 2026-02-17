@@ -13,6 +13,7 @@ import DeleteButton from '../../app_infrastructure/components/DeleteButton';
 import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldSave';
 import CategoryResultsAndPredictionsInPeriodsChart from '../../charts/components/CategoryResultsAndPredictionsInPeriodsChart';
 import CategoryTypes from '../utils/CategoryTypes';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  * TransferCategoryDetail component to display details of single Transfer Category.
@@ -20,18 +21,19 @@ import CategoryTypes from '../utils/CategoryTypes';
 export default function TransferCategoryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp, updateRefreshTimestamp } =
+  const { contextWalletId, refreshTimestamp, updateRefreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/categories/`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);
   const [typeOptions, setTypeOptions] = useState([]);
   const [priorityOptions, setPriorityOptions] = useState([]);
   const [depositOptions, setDepositOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const apiResponse = await getApiObjectDetails(apiUrl, id);
         setObjectData(apiResponse);
@@ -42,6 +44,8 @@ export default function TransferCategoryDetail() {
           message: 'Category details loading failed.',
         });
         navigate('/categories');
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -102,6 +106,14 @@ export default function TransferCategoryDetail() {
       setAlert
     );
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Paper

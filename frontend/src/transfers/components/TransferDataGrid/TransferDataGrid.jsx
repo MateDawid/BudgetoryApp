@@ -31,9 +31,8 @@ const TransferDataGrid = ({ transferType }) => {
   const navigate = useNavigate();
   // Contexts
   const { setAlert } = useContext(AlertContext);
-  const { getContextWalletId, contextWalletCurrency, refreshTimestamp } =
+  const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
 
   // API URL
   let apiUrl;
@@ -111,6 +110,7 @@ const TransferDataGrid = ({ transferType }) => {
     if (!contextWalletId) {
       return;
     }
+    setFilterModel({ items: [] });
     getPeriodsChoices();
     getCategories();
     getDeposits();
@@ -271,11 +271,8 @@ const TransferDataGrid = ({ transferType }) => {
    */
   useEffect(() => {
     const loadData = async () => {
-      if (!contextWalletId) {
-        setLoading(false);
-        return;
-      }
       try {
+        setLoading(true);
         const rowsResponse = await getApiObjectsList(
           apiUrl,
           paginationModel,
@@ -302,13 +299,7 @@ const TransferDataGrid = ({ transferType }) => {
       return;
     }
     loadData();
-  }, [
-    contextWalletId,
-    paginationModel,
-    sortModel,
-    filterModel,
-    refreshTimestamp,
-  ]);
+  }, [paginationModel, sortModel, filterModel, refreshTimestamp]);
 
   /**
    * Function to update DataGrid pagination model.

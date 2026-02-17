@@ -13,6 +13,7 @@ import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldS
 import { WalletContext } from '../../app_infrastructure/store/WalletContext';
 import WalletDepositsDataGrid from '../components/WalletDepositsDataGrid';
 import DepositsInPeriodsChart from '../../charts/components/DepositsInPeriodsChart';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  * WalletDetail component to display details of single Wallet.
@@ -26,6 +27,7 @@ export default function WalletDetail() {
   const { setAlert } = useContext(AlertContext);
   const [walletData, setWalletData] = useState([]);
   const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   /**
    * Fetches select options for Category select fields from API.
@@ -45,6 +47,7 @@ export default function WalletDetail() {
    */
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const walletResponse = await getApiObjectDetails(apiUrl, id, [
           'name',
@@ -56,6 +59,8 @@ export default function WalletDetail() {
       } catch {
         setAlert({ type: 'error', message: 'Wallet details loading failed.' });
         navigate('/wallets');
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
@@ -78,6 +83,14 @@ export default function WalletDetail() {
     );
     updateRefreshTimestamp();
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Paper

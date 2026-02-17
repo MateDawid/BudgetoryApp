@@ -23,9 +23,8 @@ const StyledHeader = styled(Typography)(() => ({
  */
 function LandingPage() {
   document.title = 'Budgetory';
-  const { getContextWalletId } = useContext(WalletContext);
+  const { contextWalletId } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
-  const contextWalletId = getContextWalletId();
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
 
@@ -35,6 +34,7 @@ function LandingPage() {
   useEffect(() => {
     async function getWallets() {
       try {
+        setLoading(true);
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/?ordering=name&fields=id,name,deposits_count,balance,currency_name`
         );
@@ -58,7 +58,7 @@ function LandingPage() {
           <CircularProgress size="3rem" />
         </Grid>
       )}
-      {(!loading && wallets.length) === 0 && (
+      {!loading && wallets.length === 0 && (
         <Grid size={12} display="flex" justifyContent="center" width="100%">
           <Paper
             elevation={24}
@@ -85,7 +85,7 @@ function LandingPage() {
           </Paper>
         </Grid>
       )}
-      {!loading && contextWalletId && wallets.length > 0 && (
+      {!loading && wallets.length > 0 && (
         <>
           <Grid size={12}>
             <WalletsSummaryTable wallets={wallets} />

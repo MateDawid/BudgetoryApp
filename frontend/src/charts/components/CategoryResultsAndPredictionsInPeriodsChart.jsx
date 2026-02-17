@@ -37,9 +37,7 @@ export default function CategoryResultsAndPredictionsInPeriodsChart({
   categoryId,
   categoryType,
 }) {
-  const { getContextWalletId, contextWalletCurrency } =
-    useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
+  const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   // Filters values
   const [displayValue, setDisplayValue] = useState(null);
   const [periodsOnChart, setPeriodsOnChart] = useState(12);

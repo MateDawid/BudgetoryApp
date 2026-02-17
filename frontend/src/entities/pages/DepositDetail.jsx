@@ -9,6 +9,7 @@ import { WalletContext } from '../../app_infrastructure/store/WalletContext';
 import DeleteButton from '../../app_infrastructure/components/DeleteButton';
 import onEditableFieldSave from '../../app_infrastructure/utils/onEditableFieldSave';
 import TransfersInPeriodsChart from '../../charts/components/TransfersInPeriodsChart';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  * DepositDetail component to display details of single Deposit.
@@ -16,18 +17,19 @@ import TransfersInPeriodsChart from '../../charts/components/TransfersInPeriodsC
 export default function DepositDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getContextWalletId, refreshTimestamp, updateRefreshTimestamp } =
+  const { contextWalletId, refreshTimestamp, updateRefreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits/?fields=id,name,description,is_active`;
   const { setAlert } = useContext(AlertContext);
   const [objectData, setObjectData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   /**
    * Fetches Wallets list from API.
    */
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const apiResponse = await getApiObjectDetails(apiUrl, id, [
           'id',
@@ -40,6 +42,8 @@ export default function DepositDetail() {
       } catch {
         setAlert({ type: 'error', message: 'Deposit details loading failed.' });
         navigate('/entities');
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -69,6 +73,14 @@ export default function DepositDetail() {
       setAlert
     );
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Paper

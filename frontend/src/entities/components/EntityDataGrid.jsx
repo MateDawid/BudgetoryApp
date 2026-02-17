@@ -33,10 +33,8 @@ const EntityDataGrid = ({ entityType }) => {
   const navigate = useNavigate();
   // Contexts
   const { setAlert } = useContext(AlertContext);
-  const { getContextWalletId, contextWalletCurrency, refreshTimestamp } =
+  const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
-
   // API URL
   let apiUrl;
   let detailUrl;
@@ -185,11 +183,8 @@ const EntityDataGrid = ({ entityType }) => {
    */
   useEffect(() => {
     const loadData = async () => {
-      if (!contextWalletId) {
-        setLoading(false);
-        return;
-      }
       try {
+        setLoading(true);
         const rowsResponse = await getApiObjectsList(
           apiUrl,
           paginationModel,

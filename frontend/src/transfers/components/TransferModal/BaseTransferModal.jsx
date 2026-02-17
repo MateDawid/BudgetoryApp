@@ -7,6 +7,7 @@ import TransferTypes from '../../utils/TransferTypes';
 import CategoryTypes from '../../../categories/utils/CategoryTypes';
 import AddIcon from '@mui/icons-material/Add';
 import EntityAddModal from '../../../entities/components/EntityModal/EntityAddModal';
+import { EntityTypes } from '../../../entities/components/EntityDataGrid';
 
 /**
  * BaseTransferModal component for displaying Transfer form for adding and editing.
@@ -24,9 +25,8 @@ export default function BaseTransferModal({
   callApi,
   editedTransfer = undefined,
 }) {
-  const { getContextWalletId, contextWalletCurrency, refreshTimestamp } =
+  const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
     useContext(WalletContext);
-  const contextWalletId = getContextWalletId();
 
   // Selectables
   const [categories, setCategories] = useState([]);
@@ -37,7 +37,6 @@ export default function BaseTransferModal({
   // Entity add form variables
   const entityApiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/entities/`;
   const [entityFormOpen, setEntityFormOpen] = useState(false);
-  const [entityAdded, setEntityAdded] = useState(0);
 
   const fields = {
     date: {
@@ -136,7 +135,7 @@ export default function BaseTransferModal({
     }
     if (!contextWalletId || !formOpen) return;
     getDeposits();
-  }, [contextWalletId, refreshTimestamp]);
+  }, [contextWalletId, formOpen, refreshTimestamp]);
 
   /**
    * Fetches select options for Transfer entities objects from API.
@@ -150,7 +149,7 @@ export default function BaseTransferModal({
     }
     if (!contextWalletId || !formOpen) return;
     getEntities();
-  }, [contextWalletId, refreshTimestamp, entityAdded]);
+  }, [contextWalletId, formOpen, refreshTimestamp]);
 
   /**
    * Fetches select options for Transfer categories object from API.
@@ -193,7 +192,7 @@ export default function BaseTransferModal({
         apiUrl={entityApiUrl}
         formOpen={entityFormOpen}
         setFormOpen={setEntityFormOpen}
-        onSuccess={() => setEntityAdded(Date.now())}
+        entityType={EntityTypes.ENTITY}
       />
     </>
   );
