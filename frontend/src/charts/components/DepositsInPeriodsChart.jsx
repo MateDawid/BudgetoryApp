@@ -8,6 +8,7 @@ import FilterField from '../../app_infrastructure/components/FilterField';
 import CategoryTypes from '../../categories/utils/CategoryTypes';
 import { DepositChoicesContext } from '../../app_infrastructure/store/DepositChoicesContext';
 import { PeriodChoicesContext } from '../../app_infrastructure/store/PeriodChoicesContext';
+import { LoadingOverlay } from './LoadingOverlay';
 
 const DISPLAY_CHOICES = [
   { label: 'Expenses', value: CategoryTypes.EXPENSE },
@@ -28,6 +29,7 @@ export default function DepositsInPeriodsChart() {
   // Chart data
   const [xAxis, setXAxis] = useState([]);
   const [series, setSeries] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getFilterModel = () => {
@@ -48,6 +50,9 @@ export default function DepositsInPeriodsChart() {
     };
     const loadDepositsResults = async () => {
       try {
+        setLoading(true);
+        setXAxis([]);
+        setSeries([]);
         const response = await getApiObjectsList(
           `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/charts/deposits_in_periods/`,
           {},
@@ -66,6 +71,8 @@ export default function DepositsInPeriodsChart() {
       } catch {
         setXAxis([]);
         setSeries([]);
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -112,6 +119,8 @@ export default function DepositsInPeriodsChart() {
         series={series}
         height={300}
         margin={{ bottom: 10 }}
+        loading={loading}
+        slots={{ loadingOverlay: LoadingOverlay }}
         slotProps={{
           legend: {
             direction: 'horizontal',

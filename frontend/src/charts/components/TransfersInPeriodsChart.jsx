@@ -8,6 +8,7 @@ import FilterField from '../../app_infrastructure/components/FilterField';
 import CategoryTypes from '../../categories/utils/CategoryTypes';
 import { EntityChoicesContext } from '../../app_infrastructure/store/EntityChoicesContext';
 import { DepositChoicesContext } from '../../app_infrastructure/store/DepositChoicesContext';
+import { LoadingOverlay } from './LoadingOverlay';
 
 const TRANSFER_TYPES = [
   { label: 'All', value: null },
@@ -22,7 +23,6 @@ const PERIODS_ON_CHART = [
   { label: '24', value: 24 },
   { label: 'All', value: null },
 ];
-
 /**
  * TransfersInPeriodsChart component for displaying BarChart with accumulated Transfers in Periods.
  * @param {object} props
@@ -45,6 +45,7 @@ export default function TransfersInPeriodsChart({
   // Chart data
   const [xAxis, setXAxis] = useState([]);
   const [series, setSeries] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const valueFormatter = (value) =>
     value
@@ -54,6 +55,9 @@ export default function TransfersInPeriodsChart({
   useEffect(() => {
     const loadDepositsResults = async () => {
       try {
+        setLoading(true);
+        setXAxis([]);
+        setSeries([]);
         const filterModel = {};
         if (depositId) filterModel['deposit'] = depositId;
         if (deposit) filterModel['deposit'] = deposit;
@@ -89,6 +93,8 @@ export default function TransfersInPeriodsChart({
       } catch {
         setXAxis([]);
         setSeries([]);
+      } finally {
+        setLoading(false);
       }
     };
     if (!contextWalletId) {
@@ -141,6 +147,8 @@ export default function TransfersInPeriodsChart({
         yAxis={[{ valueFormatter: (v) => v.toString() }]}
         height={300}
         series={series}
+        loading={loading}
+        slots={{ loadingOverlay: LoadingOverlay }}
         slotProps={{
           legend: {
             direction: 'horizontal',
