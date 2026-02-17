@@ -1,85 +1,78 @@
-# Getting Started with Create React App
+# Budgetory Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React client for the **Budgetory** personal finance management application, backed by the [Budgetory Backend](https://github.com/MateDawid/Budgetory_Backend) REST API.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Tech Stack
 
-### `yarn start`
+| | Technology |
+|---|---|
+| Framework | React (Create React App) |
+| Package Manager | Yarn |
+| Linting | ESLint |
+| Containerisation | Docker |
+| CI/CD | GitHub Actions |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `yarn test`
+### 🔐 User Authentication
+Secure login and registration flow. User sessions are managed via token-based authentication with the backend API, ensuring that all data is scoped to the authenticated user.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `yarn build`
+### 📅 Budget Periods
+Users can define distinct budget periods (e.g. monthly or custom date ranges) to organise their finances over time. Each period acts as a container for all income, expenses, and account data recorded within it.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Budget Periods](docs/screenshots/budget_periods.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🏷️ Categories
+Income and expense entries are assigned to categories, giving users a clear breakdown of where money is coming from and where it is going. Categories can be created and managed to match personal spending habits.
 
-### `yarn eject`
+![Categories](docs/screenshots/categories.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 💳 Deposits & Savings Accounts
+Users can track multiple deposits and savings accounts within the application. Each account holds a balance that is updated as transactions are recorded, giving a real-time view of funds across all accounts.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Deposits](docs/screenshots/deposits.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### 💰 Income & Expense Tracking
+The core of the application — users can log individual income and expense transactions, assign them to a category and account, and attach them to a budget period. The transaction list provides a running history of all financial activity.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![Transactions](docs/screenshots/transactions.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### 🔮 Expense Predictions
+Users can set predicted spending amounts for expense categories within a budget period. This allows planning ahead by estimating how much is expected to be spent in each category, and then tracking actual expenses against those predictions as the period progresses.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![Predictions](docs/screenshots/predictions.png)
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 📊 Reports & Charts
+Visual summaries of financial data displayed through charts and aggregated statistics. Reports allow users to quickly assess their financial health within a given budget period, compare income against expenses, and identify spending trends across categories.
 
-### Making a Progressive Web App
+![Reports](docs/screenshots/reports.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Related Repositories
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+| Repository | Description |
+|---|---|
+| [Budgetory_Backend](https://github.com/MateDawid/Budgetory_Backend) | Django REST Framework API powering this client |
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Author
 
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### Add package
-```commandline
-$ yarn add cypress@10.11.0 --dev
-```
-
-### ESLint run
-```commandline
-npx eslint .
-```
-
-### Cypress run
-```commandline
-yarn run cypress open
-```
+**Dawid Matusiak** — [@MateDawid](https://github.com/MateDawid)
