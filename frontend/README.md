@@ -8,6 +8,7 @@ React client for the **Budgetory** personal finance management application, back
 
 | | Technology |
 |---|---|
+| Language | JavaScript |
 | Framework | React (Create React App) |
 | Package Manager | Yarn |
 | Linting | ESLint |
@@ -23,10 +24,40 @@ Secure login and registration flow. User sessions are managed via token-based au
 
 ---
 
-### 📅 Budget Periods
-Users can define distinct budget periods (e.g. monthly or custom date ranges) to organise their finances over time. Each period acts as a container for all income, expenses, and account data recorded within it.
+### 📊 Landing page with dashboard
 
-![Budget Periods](docs/screenshots/budget_periods.png)
+???
+
+![Reports](docs/screenshots/landing_page.png)
+
+---
+
+### Wallets 
+
+???
+
+![Wallets](docs/screenshots/wallets.png)
+
+---
+
+### 📅 Periods
+Users can define distinct periods (e.g. monthly or custom date ranges) to organise their finances over time. Each period acts as a container for all incomes, expenses, and predictions recorded within it.
+
+![Periods](docs/screenshots/periods.png)
+
+---
+
+### 💳 Deposits
+Users can track multiple deposits within the application. Each account holds a balance that is updated as transfers are recorded, giving a real-time view of funds across all accounts.
+
+![Deposits](docs/screenshots/deposits.png)
+
+---
+
+### Entities
+???
+
+![Entities](docs/screenshots/entities.png)
 
 ---
 
@@ -37,31 +68,23 @@ Income and expense entries are assigned to categories, giving users a clear brea
 
 ---
 
-### 💳 Deposits & Savings Accounts
-Users can track multiple deposits and savings accounts within the application. Each account holds a balance that is updated as transactions are recorded, giving a real-time view of funds across all accounts.
-
-![Deposits](docs/screenshots/deposits.png)
-
----
-
-### 💰 Income & Expense Tracking
-The core of the application — users can log individual income and expense transactions, assign them to a category and account, and attach them to a budget period. The transaction list provides a running history of all financial activity.
-
-![Transactions](docs/screenshots/transactions.png)
-
----
-
 ### 🔮 Expense Predictions
-Users can set predicted spending amounts for expense categories within a budget period. This allows planning ahead by estimating how much is expected to be spent in each category, and then tracking actual expenses against those predictions as the period progresses.
+Users can set predicted spending amounts for expense categories within a period. This allows planning ahead by estimating how much is expected to be spent in each category, and then tracking actual expenses against those predictions as the period progresses.
 
 ![Predictions](docs/screenshots/predictions.png)
 
 ---
+### Incomes
+Users can log individual income transfers, assign them to a category and deposit, and attach them to period. The incomes list provide a running history of all financial activity.
 
-### 📊 Reports & Charts
-Visual summaries of financial data displayed through charts and aggregated statistics. Reports allow users to quickly assess their financial health within a given budget period, compare income against expenses, and identify spending trends across categories.
+![Incomes](docs/screenshots/incomes.png)
 
-![Reports](docs/screenshots/reports.png)
+---
+
+### Expenses
+Users can log individual expense transfers, assign them to a category and deposit, and attach them to period. The expenses list provide a running history of all financial activity.
+
+![Expenses](docs/screenshots/expenses.png)
 
 ---
 
@@ -75,4 +98,4 @@ Visual summaries of financial data displayed through charts and aggregated stati
 
 ## Author
 
-**Dawid Matusiak** — [@MateDawid](https://github.com/MateDawid)
+**Dawid Mateusiak** — [@MateDawid](https://github.com/MateDawid)
