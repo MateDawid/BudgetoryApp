@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("api/healthcheck", HealthcheckView.as_view(), name="healthcheck"),
+    path("api/admin/shell/", include("django_admin_shell.urls")),
     path("api/admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/users/", include("app_users.urls")),

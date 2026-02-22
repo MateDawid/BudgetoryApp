@@ -621,6 +621,21 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-admin-shell"
+version = "2.0.1"
+description = ""
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "django-admin-shell-2.0.1.tar.gz", hash = "sha256:334a651e53ae4f59d0d279d7ede7dc5ed7a7733d4d093765b447dca5274c7b30"},
+    {file = "django_admin_shell-2.0.1-py2.py3-none-any.whl", hash = "sha256:b129e282ebd581c2099c0504edf081259728b3a504b40c5784d0457b8cb41470"},
+]
+
+[package.dependencies]
+Django = ">=2.0"
+
+[[package]]
 name = "django-cors-headers"
 version = "4.9.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -2444,4 +2459,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "c3813bfe451da891ab90c8fc122bf87dc10bcbecdb41b9d2cf6dc9d7cecafe1f"
+content-hash = "07808c83726305dc9871bd31eaf9e0f09da2eea9eb4efe703488e87aabca259d"
