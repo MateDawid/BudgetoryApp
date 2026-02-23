@@ -17,6 +17,7 @@ jobs:
       pull-requests: write
     env:
       DEV: true
+      SECRET_KEY: test_secret_key
       ENV_FOR_DYNACONF: default
       DYNACONF_ENVIRONMENT__DEBUG: 0
       DATABASE: postgres
