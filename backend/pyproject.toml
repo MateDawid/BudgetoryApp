@@ -24,6 +24,7 @@ python-dateutil = "^2.9.0.post0"
 drf-flex-fields = "^1.0.2"
 gunicorn = "^25.1.0"
 django-admin-shell = "^2.0.1"
+wheel = ">=0.46.2"
 
 
 [tool.poetry.group.dev.dependencies]

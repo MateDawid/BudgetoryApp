@@ -2456,7 +2456,25 @@ platformdirs = ">=3.9.1,<5"
 docs = ["furo (>=2023.7.26)", "proselint (>=0.13)", "sphinx (>=7.1.2,!=7.3)", "sphinx-argparse (>=0.4)", "sphinxcontrib-towncrier (>=0.2.1a0)", "towncrier (>=23.6)"]
 test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=23.1)", "pytest (>=7.4)", "pytest-env (>=0.8.2)", "pytest-freezer (>=0.4.8) ; platform_python_implementation == \"PyPy\" or platform_python_implementation == \"GraalVM\" or platform_python_implementation == \"CPython\" and sys_platform == \"win32\" and python_version >= \"3.13\"", "pytest-mock (>=3.11.1)", "pytest-randomly (>=3.12)", "pytest-timeout (>=2.1)", "setuptools (>=68)", "time-machine (>=2.10) ; platform_python_implementation == \"CPython\""]
 
+[[package]]
+name = "wheel"
+version = "0.46.3"
+description = "Command line tool for manipulating wheel files"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "wheel-0.46.3-py3-none-any.whl", hash = "sha256:4b399d56c9d9338230118d705d9737a2a468ccca63d5e813e2a4fc7815d8bc4d"},
+    {file = "wheel-0.46.3.tar.gz", hash = "sha256:e3e79874b07d776c40bd6033f8ddf76a7dad46a7b8aa1b2787a83083519a1803"},
+]
+
+[package.dependencies]
+packaging = ">=24.0"
+
+[package.extras]
+test = ["pytest (>=6.0.0)", "setuptools (>=77)"]
+
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "07808c83726305dc9871bd31eaf9e0f09da2eea9eb4efe703488e87aabca259d"
+content-hash = "4a9f2ba40e162db2bed203d604d9917d2e785aeeedd186a1217b8f1b5c515602"
