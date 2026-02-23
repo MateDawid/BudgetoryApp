@@ -17,29 +17,17 @@ jobs:
       pull-requests: write
     env:
       DEV: true
-      SECRET_KEY: test_secret_key
       ENV_FOR_DYNACONF: default
-      DYNACONF_ENVIRONMENT__DEBUG: 0
       DATABASE: postgres
       SQL_HOST: db
       SQL_PORT: 5432
       POSTGRES_DB: budgetory_db
       POSTGRES_USER: budgetory_user
       POSTGRES_PASSWORD: budgetory_password
-      DYNACONF_ENVIRONMENT__SECRET_KEY: test_secret_key
-      DYNACONF_ENVIRONMENT__SUPERUSER_API_KEY: superuser_api_key
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
-
-      - name: "Set derived env vars"
-        run: |
-          echo "DYNACONF_DATABASE__USER=${{ env.POSTGRES_USER }}" >> $GITHUB_ENV
-          echo "DYNACONF_DATABASE__PASSWORD=${{ env.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
-          echo "DYNACONF_DATABASE__HOST=${{ env.SQL_HOST }}" >> $GITHUB_ENV
-          echo "DYNACONF_DATABASE__PORT=${{ env.SQL_PORT }}" >> $GITHUB_ENV
-          echo "DYNACONF_DATABASE__NAME=${{ env.POSTGRES_DB }}" >> $GITHUB_ENV
 
       - name: "Build image"
         run: docker compose -f docker-compose-tests.yaml up backend -d

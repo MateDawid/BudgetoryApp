@@ -12,18 +12,30 @@ services:
     command: python src/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./tests:/app/tests
-      - ./.secrets.yaml:/app/.secrets.yaml
       - ./.flake8:/app/.flake8
       - ./test-results:/app/test-results
+    environment:
+      - DYNACONF_ENVIRONMENT__SECRET_KEY=test_secret_key
+      - DYNACONF_ENVIRONMENT__SUPERUSER_API_KEY=superuser_api_key
+      - DYNACONF_ENVIRONMENT__DEBUG=0
+      - DYNACONF_DATABASE__NAME=${POSTGRES_DB}
+      - DYNACONF_DATABASE__USER=${POSTGRES_USER}
+      - DYNACONF_DATABASE__PASSWORD=${POSTGRES_PASSWORD}
+      - DYNACONF_DATABASE__HOST=${SQL_HOST}
+      - DYNACONF_DATABASE__PORT=${SQL_PORT}
     ports:
       - 8000:8000
-
     depends_on:
       - db
+
   db:
     image: postgres:15
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
