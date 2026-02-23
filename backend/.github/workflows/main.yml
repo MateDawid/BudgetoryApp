@@ -48,7 +48,7 @@ jobs:
         run: docker compose -f docker-compose-tests.yaml run backend sh -c "bandit -c pyproject.toml -r ."
 
       - name: "[Code quality] safety"
-        run: docker compose -f docker-compose-tests.yaml run backend sh -c "safety scan -i 70612,66963"
+        run: docker compose -f docker-compose-tests.yaml run backend sh -c "safety check -i 70612,66963"
 
       - name: "[Tests] pytest with coverage"
         run: docker compose -f docker-compose-tests.yaml run backend sh -c "python src/manage.py wait_for_db && pytest --junitxml=test-results/junit.xml --cov=. --cov-report=xml:test-results/coverage.xml --cov-report=html --cov-report=term"
