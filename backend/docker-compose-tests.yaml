@@ -17,13 +17,7 @@ services:
       - ./test-results:/app/test-results
     ports:
       - 8000:8000
-    environment:
-      - DATABASE=postgres
-      - SQL_HOST=db
-      - SQL_PORT=5432
-      - DYNACONF_ENVIRONMENT__SECRET_KEY=${SECRET_KEY}
-      - DYNACONF_DATABASE__USER=${DB_USER}
-      - DYNACONF_DATABASE__PASSWORD=${DB_PASSWORD}
+
     depends_on:
       - db
   db:
@@ -32,10 +26,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=budget_api
-      - POSTGRES_PASSWORD=budget_api
-      - POSTGRES_DB=budget_manager
 
 volumes:
   postgres_data:

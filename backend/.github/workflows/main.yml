@@ -17,9 +17,22 @@ jobs:
       pull-requests: write
     env:
       DEV: true
-      SECRET_KEY: test_secret_key
-      DB_USER: budget_api
-      DB_PASSWORD: budget_api
+      ENV_FOR_DYNACONF: default
+      DYNACONF_ENVIRONMENT__DEBUG: 0
+      DATABASE: postgres
+      SQL_HOST: db
+      SQL_PORT: 5432
+      POSTGRES_DB: budgetory_db
+      POSTGRES_USER: budgetory_user
+      POSTGRES_PASSWORD: budgetory_password
+      DYNACONF_ENVIRONMENT__SECRET_KEY: test_secret_key
+      DYNACONF_ENVIRONMENT__SUPERUSER_API_KEY: superuser_api_key
+      DYNACONF_DATABASE__USER: ${POSTGRES_USER}
+      DYNACONF_DATABASE__PASSWORD: ${POSTGRES_PASSWORD}
+      DYNACONF_DATABASE__HOST: ${SQL_HOST}
+      DYNACONF_DATABASE__PORT: ${SQL_PORT}
+      DYNACONF_DATABASE__NAME: ${POSTGRES_DB}
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
