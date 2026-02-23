@@ -17,9 +17,14 @@ jobs:
       pull-requests: write
     env:
       DEV: true
-      SECRET_KEY: test_secret_key
-      DB_USER: budget_api
-      DB_PASSWORD: budget_api
+      ENV_FOR_DYNACONF: default
+      DATABASE: postgres
+      SQL_HOST: db
+      SQL_PORT: 5432
+      POSTGRES_DB: budgetory_db
+      POSTGRES_USER: budgetory_user
+      POSTGRES_PASSWORD: budgetory_password
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4

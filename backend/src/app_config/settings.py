@@ -7,9 +7,11 @@ from dynaconf import settings
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = settings.ENVIRONMENT.SECRET_KEY
+SUPERUSER_API_KEY = settings.ENVIRONMENT.SUPERUSER_API_KEY
 DEBUG = bool(settings.ENVIRONMENT.get("DEBUG", 0))
 DEBUG_TOOLBAR_ENABLED = bool(settings.ENVIRONMENT.get("DEBUG_TOOLBAR_ENABLED", 0))
 ALLOWED_HOSTS = [host(settings) if callable(host) else host for host in settings.ENVIRONMENT.ALLOWED_HOSTS]
+CORS_ORIGIN_WHITELIST = settings.ENVIRONMENT.CORS_ORIGIN_WHITELIST
 
 # Application definition
 
@@ -28,6 +30,7 @@ OUTER_APPS = [
     "rest_framework.authtoken",
     "django_filters",
     "drf_yasg",
+    "django_admin_shell",
 ]
 
 CREATED_APPS = [
@@ -139,11 +142,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -176,6 +179,12 @@ SWAGGER_SETTINGS = {
         "JWT": {
             "type": "apiKey",
             "description": "JSON Web Token => Authorization: Bearer {token_value}",
+            "name": "Authorization",
+            "in": "header",
+        },
+        "Superuser API Key": {
+            "type": "apiKey",
+            "description": "Superuser API Key Authorization: KEY {key_value}",
             "name": "Authorization",
             "in": "header",
         },
@@ -218,7 +227,3 @@ LOGGING = {
         },
     },
 }
-
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-]
