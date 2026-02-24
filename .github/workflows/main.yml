@@ -1,8 +1,6 @@
 name: Main
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -23,10 +21,6 @@ jobs:
       POSTGRES_DB: budgetory_db
       POSTGRES_USER: budgetory_user
       POSTGRES_PASSWORD: budgetory_password
-
-    if: |
-      github.event_name == 'push' ||
-      contains(github.event.pull_request.changed_files, 'backend/')
 
     steps:
       - name: "Checkout"
@@ -83,11 +77,6 @@ jobs:
     defaults:
       run:
         working-directory: frontend
-
-    # Only run when frontend files change
-    if: |
-      github.event_name == 'push' ||
-      contains(github.event.pull_request.changed_files, 'frontend/')
 
     steps:
       - name: Checkout code
