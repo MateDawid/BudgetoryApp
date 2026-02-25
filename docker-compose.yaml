@@ -1,4 +1,4 @@
-name: budgetory_app
+name: budgetory-app
 
 services:
   backend:
@@ -20,7 +20,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     healthcheck:
       test: curl --fail http://localhost:8000/api/healthcheck || exit 1
       interval: 10s
@@ -35,6 +36,41 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+  frontend:
+    build:
+      context: frontend
+      dockerfile: docker/Dockerfile
+      target: release-image
+    image: frontend:release-image
+    command: yarn start
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - WATCHPACK_POOLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL=http://localhost:8000
+    ports:
+      - 3000:3000
+    stdin_open: true
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules
+    volumes:
+      - /app/node_modules
+
 
 volumes:
   postgres_data:
