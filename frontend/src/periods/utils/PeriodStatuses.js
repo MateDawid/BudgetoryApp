@@ -4,7 +4,7 @@
 const PeriodStatuses = {
   DRAFT: 1,
   ACTIVE: 2,
-  CLOSED: 3
+  CLOSED: 3,
 };
 
 export default PeriodStatuses;
