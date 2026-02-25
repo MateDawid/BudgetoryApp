@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: backend
-      dockerfile: backend/docker/Dockerfile
+      dockerfile: docker/Dockerfile
       target: release-image
       args:
         - DEV=true
@@ -35,27 +35,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-  frontend:
-    profiles: [with_frontend]
-    build:
-      context: frontend
-      target: release-image
-    command: yarn start
-    env_file:
-      - ./frontend/.env
-    depends_on:
-      - backend
-    environment:
-      - WATCHPACK_POOLING=true
-      - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BASE_URL=http://localhost:8000
-    ports:
-      - 3000:3000
-    stdin_open: true
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-
 
 volumes:
   postgres_data:
