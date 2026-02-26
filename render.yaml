@@ -2,7 +2,7 @@ services:
   - type: web
     name: budgetory-backend
     runtime: docker
-    dockerfilePath: ./docker/Dockerfile
+    dockerfilePath: ./backend/docker/Dockerfile
     healthCheckPath: /api/healthcheck
     plan: free
     envVars:
@@ -42,6 +42,22 @@ services:
         fromDatabase:
           name: budgetory-db
           property: database
+
+  - type: web
+    name: budgetory-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/docker/Dockerfile
+    plan: free
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        fromService:
+          name: budgetory-backend
+          type: web
+          property: host
+      - key: REACT_APP_ACCESS_TOKEN_LIFETIME
+        value: "3600"
+      - key: REACT_APP_REFRESH_TOKEN_LIFETIME
+        value: "86400"
 
 databases:
   - name: budgetory-db
