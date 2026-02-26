@@ -53,7 +53,7 @@ services:
       - ./frontend/.env
     depends_on:
       backend:
-        condition: service_healthy
+        condition: service_started
     environment:
       - WATCHPACK_POOLING=true
       - CHOKIDAR_USEPOLLING=true
