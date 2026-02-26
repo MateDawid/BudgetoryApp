@@ -3,9 +3,12 @@
 ![CI](https://github.com/MateDawid/BudgetoryApp/actions/workflows/main.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![Django](https://img.shields.io/badge/django-092E20?logo=django&logoColor=white)
-![DRF](https://img.shields.io/badge/DRF-REST-red)
+![Django REST Framework](https://img.shields.io/badge/DRF-ff1709?style=flat&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-4169E1?logo=postgresql&logoColor=white)
 ![React](https://img.shields.io/badge/react-18-61DAFB?logo=react&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-ES6-F7DF1E?logo=javascript&logoColor=black)
+![Docker](https://img.shields.io/badge/docker-2496ED?logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/docker--compose-2496ED?logo=docker&logoColor=white)
 
 FullStack personal finance management application consisting of a Django REST Framework API, PostgreSQL database, and React frontend client.
 
@@ -53,7 +56,7 @@ Users are greeted with a dashboard providing a high-level overview of their fina
 
 The API powers this with computed endpoints that aggregate financial data in real time, calculating key metrics across wallets and periods.
 
-![Landing page](frontend/docs/screenshots/landing_page.png)
+![Landing page](docs/screenshots/landing_page.png)
 
 ---
 
@@ -63,7 +66,7 @@ Wallets organise multiple deposits under a common purpose — for example, a dai
 
 The API supports full CRUD operations with user-scoped isolation, ensuring wallets and their related data remain private to each user.
 
-![Wallets](frontend/docs/screenshots/wallets.png)
+![Wallets](docs/screenshots/wallets.png)
 
 ---
 
@@ -73,7 +76,7 @@ Users define distinct time ranges (e.g. monthly or custom date ranges) to organi
 
 The API enforces that periods cannot overlap within the same wallet and handles cascading deletion of related data.
 
-![Periods](frontend/docs/screenshots/periods.png)
+![Periods](docs/screenshots/periods.png)
 
 ---
 
@@ -83,7 +86,7 @@ Users track multiple deposit accounts, each holding a balance that updates autom
 
 Deposit balances are automatically calculated from linked transfers and support filtering by wallet and period.
 
-![Deposits](frontend/docs/screenshots/deposits.png)
+![Deposits](docs/screenshots/deposits.png)
 
 ---
 
@@ -113,7 +116,7 @@ Users set predicted spending amounts for expense categories within a period, the
 
 Predictions are unique per category per period. The API provides comparison endpoints for budget adherence monitoring.
 
-![Predictions](frontend/docs/screenshots/predictions.png)
+![Predictions](docs/screenshots/predictions.png)
 
 ---
 
@@ -121,7 +124,7 @@ Predictions are unique per category per period. The API provides comparison endp
 
 Users log individual income transfers, assigning each to a category, deposit, period, and optionally a source entity. The full history of received funds is available and filterable by period, with deposit balances updated automatically.
 
-![Incomes](frontend/docs/screenshots/incomes.png)
+![Incomes](docs/screenshots/incomes.png)
 
 ---
 
@@ -129,7 +132,7 @@ Users log individual income transfers, assigning each to a category, deposit, pe
 
 Users log individual expense transfers, assigning each to a category, deposit, period, and optionally a target entity. The full history of outgoing payments is filterable by period and can be compared against predictions to track budget adherence.
 
-![Expenses](frontend/docs/screenshots/expenses.png)
+![Expenses](docs/screenshots/expenses.png)
 
 ---
 
