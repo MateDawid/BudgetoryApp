@@ -12,6 +12,8 @@
 
 FullStack personal finance management application consisting of a Django REST Framework API, PostgreSQL database, and React frontend client.
 
+![app-flow.gif](docs/media/app-flow.gif)
+
 ---
 
 ## Tech Stack
@@ -58,7 +60,7 @@ After logging in, users are greeted with a dashboard that provides a high-level 
 #### Backend
 The API provides computed endpoints that aggregate financial data for dashboard display. These endpoints calculate key metrics such as total income and expenses for the current period, deposit balances across wallets, and progress tracking against expense predictions — delivering real-time financial summaries.
 
-![Landing page](docs/screenshots/landing_page.png)
+![Landing page](docs/media/landing_page.png)
 
 ---
 
@@ -70,7 +72,7 @@ Wallets organise multiple deposits under a common purpose. Users can manage mult
 #### Backend
 API endpoints for managing wallets that organise multiple deposits under a common purpose. Each wallet can contain its own periods, deposits, and transfer history, enabling users to maintain separate budgets (e.g., daily spending vs. long-term savings). Supports CRUD operations with user-scoped isolation.
 
-![Wallets](docs/screenshots/wallets.png)
+![Wallets](docs/media/wallets.png)
 
 ---
 
@@ -82,7 +84,7 @@ Users can define distinct periods (e.g. monthly or custom date ranges) to organi
 #### Backend
 API for managing periods that represent time ranges (e.g. monthly or custom date ranges) during which financial activity is tracked. Each period acts as a container for incomes, expenses, and predictions. The API enforces that periods cannot overlap within the same wallet and handles cascading deletion of related data.
 
-![Periods](docs/screenshots/periods.png)
+![Periods](docs/media/periods.png)
 
 ---
 
@@ -94,7 +96,7 @@ Users can track multiple deposit accounts within the application. Each account h
 #### Backend
 CRUD operations for deposit accounts within wallets. Each deposit tracks a balance that is automatically calculated and updated based on linked transfers. The API maintains real-time balance accuracy across all deposits and supports filtering by wallet and period.
 
-![Deposits](docs/screenshots/deposits.png)
+![Deposits](docs/media/deposits.png)
 
 ---
 
@@ -106,7 +108,7 @@ Entities represent the external parties involved in financial transactions — s
 #### Backend
 API for managing entities that represent external parties involved in financial transactions (employers, shops, service providers, individuals). Entities can be associated with income or expense transfers to track money flow sources and destinations. Supports user-specific entity management with validation to prevent deletion of entities referenced by existing transfers.
 
-![Entities](docs/screenshots/entities.png)
+![Entities](docs/media/entities.png)
 
 ---
 
@@ -118,7 +120,7 @@ Income and expense entries are assigned to categories, giving users a clear brea
 #### Backend
 CRUD operations for income and expense categories used to classify transfers. Categories are user-specific and each has a type (`income` or `expense`). The API prevents deletion of categories that are referenced by existing transfers to maintain data integrity.
 
-![Categories](docs/screenshots/categories.png)
+![Categories](docs/media/categories.png)
 
 ---
 
@@ -130,7 +132,7 @@ Users can set predicted spending amounts for expense categories within a period.
 #### Backend
 API for setting and managing predicted spending amounts for expense categories within periods. Predictions are unique per category per period and allow tracking of predicted versus actual spending. Only expense categories can have predictions. The API provides comparison endpoints for budget adherence monitoring.
 
-![Predictions](docs/screenshots/predictions.png)
+![Predictions](docs/media/predictions.png)
 
 ---
 
@@ -142,7 +144,7 @@ Users can log individual income transfers and assign them to a category, a depos
 #### Backend
 Income transfer management API supporting creation, retrieval, updating, and deletion of income entries. Each income is linked to a category, deposit, period, and optionally a source entity. The API supports filtering by period and provides full transfer history with automatic deposit balance updates.
 
-![Incomes](docs/screenshots/incomes.png)
+![Incomes](docs/media/incomes.png)
 
 ---
 
@@ -154,7 +156,7 @@ Users can log individual expense transfers and assign them to a category, a depo
 #### Backend
 Expense transfer management API supporting creation, retrieval, updating, and deletion of expense entries. Each expense is linked to a category, deposit, period, and optionally a target entity. The API supports filtering by period, comparison against predictions for budget tracking, and automatic deposit balance updates.
 
-![Expenses](docs/screenshots/expenses.png)
+![Expenses](docs/media/expenses.png)
 
 ---
 
