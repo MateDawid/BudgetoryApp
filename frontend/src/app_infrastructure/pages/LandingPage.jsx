@@ -7,7 +7,6 @@ import CategoriesInPeriodsChart from '../../charts/components/CategoriesInPeriod
 import TopEntitiesInPeriodChart from '../../charts/components/TopEntitiesInPeriodChart';
 import WalletsSummaryTable from '../components/WalletsSummaryTable';
 import { getApiObjectsList } from '../services/APIService';
-import { WalletContext } from '../store/WalletContext';
 import { AlertContext } from '../store/AlertContext';
 
 const StyledHeader = styled(Typography)(() => ({
@@ -23,7 +22,6 @@ const StyledHeader = styled(Typography)(() => ({
  */
 function LandingPage() {
   document.title = 'Budgetory';
-  const { contextWalletId } = useContext(WalletContext);
   const { setAlert } = useContext(AlertContext);
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);

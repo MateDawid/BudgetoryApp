@@ -7,7 +7,6 @@ import { AlertContext } from '../../../app_infrastructure/store/AlertContext';
 import { WalletContext } from '../../../app_infrastructure/store/WalletContext';
 import { getApiObjectsList } from '../../../app_infrastructure/services/APIService';
 import TransferTypes from '../../utils/TransferTypes';
-import axios from 'axios';
 
 jest.mock('axios');
 
@@ -27,7 +26,6 @@ jest.mock('../../../app_infrastructure/services/APIService');
 jest.mock(
   '../../../app_infrastructure/components/DataGrid/StyledDataGrid',
   () => {
-    const MockReact = require('react');
     return function MockStyledDataGrid({
       rows,
       columns,
@@ -35,7 +33,6 @@ jest.mock(
       slots,
       slotProps,
       checkboxSelection,
-      ...props
     }) {
       const Footer = slots?.pagination;
       return (
@@ -113,7 +110,7 @@ jest.mock(
 jest.mock(
   '../../../app_infrastructure/components/DataGrid/StyledGridActionsCellItem',
   () => {
-    return function MockActionsCellItem({ icon, label, onClick }) {
+    return function MockActionsCellItem({ label, onClick }) {
       return (
         <button onClick={onClick} data-testid={`action-${label.toLowerCase()}`}>
           {label}
