@@ -52,10 +52,7 @@ services:
     plan: free
     envVars:
       - key: REACT_APP_BACKEND_URL
-        fromService:
-          name: budgetory-api
-          type: web
-          property: url
+        value: https://budgetory-api.onrender.com
       - key: REACT_APP_ACCESS_TOKEN_LIFETIME
         value: "3600"
       - key: REACT_APP_REFRESH_TOKEN_LIFETIME
