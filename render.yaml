@@ -3,6 +3,7 @@ services:
     name: budgetory-backend
     runtime: docker
     dockerfilePath: ./backend/docker/Dockerfile
+    dockerContext: ./backend
     healthCheckPath: /api/healthcheck
     plan: free
     envVars:
@@ -47,6 +48,7 @@ services:
     name: budgetory-frontend
     runtime: docker
     dockerfilePath: ./frontend/docker/Dockerfile
+    dockerContext: ./frontend
     plan: free
     envVars:
       - key: REACT_APP_BACKEND_URL
