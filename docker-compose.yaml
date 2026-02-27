@@ -46,8 +46,8 @@ services:
     build:
       context: frontend
       dockerfile: docker/Dockerfile
-      target: release-image
-    image: frontend:release-image
+      target: local-image
+    image: frontend:local-image
     command: yarn start
     env_file:
       - ./frontend/.env
