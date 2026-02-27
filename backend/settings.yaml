@@ -25,7 +25,7 @@ production:
     ALLOWED_HOSTS:
       - .onrender.com
     CORS_ORIGIN_WHITELIST:
-      - https://budgetory-frontend.onrender.com
+      - https://budgetory.onrender.com
   DATABASE:
     ENGINE: django.db.backends.postgresql
     NAME: ~

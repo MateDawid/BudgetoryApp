@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: budgetory-backend
+    name: budgetory-api
     runtime: docker
     dockerfilePath: ./backend/docker/Dockerfile
     dockerContext: ./backend
@@ -45,7 +45,7 @@ services:
           property: database
 
   - type: web
-    name: budgetory-frontend
+    name: budgetory
     runtime: docker
     dockerfilePath: ./frontend/docker/Dockerfile
     dockerContext: ./frontend
@@ -53,9 +53,9 @@ services:
     envVars:
       - key: REACT_APP_BACKEND_URL
         fromService:
-          name: budgetory-backend
+          name: budgetory-api
           type: web
-          property: host
+          property: url
       - key: REACT_APP_ACCESS_TOKEN_LIFETIME
         value: "3600"
       - key: REACT_APP_REFRESH_TOKEN_LIFETIME
