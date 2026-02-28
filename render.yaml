@@ -1,6 +1,7 @@
 services:
   - type: web
     name: budgetory-api
+    region: frankfurt
     runtime: docker
     dockerfilePath: ./backend/docker/Dockerfile
     dockerContext: ./backend
@@ -49,6 +50,7 @@ services:
 
   - type: web
     name: budgetory
+    region: frankfurt
     runtime: docker
     dockerfilePath: ./frontend/docker/Dockerfile
     dockerContext: ./frontend
