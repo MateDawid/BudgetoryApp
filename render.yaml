@@ -69,3 +69,4 @@ services:
 databases:
   - name: budgetory-db
     plan: free
+    region: frankfurt
