@@ -105,7 +105,7 @@ const Rightbar = () => {
         <Box mb={2} width="100%" display="flex" justifyContent="flex-end">
           <StyledButton
             variant="outlined"
-            href="https://github.com/MateDawid/Budgetory_Backend/issues/new"
+            href="https://github.com/MateDawid/BudgetoryApp/issues/new"
             target="_blank"
             startIcon={<FeedbackIcon />}
           >

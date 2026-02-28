@@ -1,26 +1,27 @@
-name: budgetory
+name: budgetory-app
 
 services:
   backend:
     build:
-      context: .
-      dockerfile: ./docker/Dockerfile
+      context: backend
+      dockerfile: docker/Dockerfile
       target: release-image
       args:
-        - DEV=${DEV}
+        - DEV=true
     image: backend:release-image
     env_file:
-      - .env
+      - ./backend/.env
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./src:/app/src
-      - ./.secrets.yaml:/app/.secrets.yaml
+      - ./backend/src:/app/src
+      - ./backend/.secrets.yaml:/app/.secrets.yaml
     ports:
       - 8000:8000
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     healthcheck:
       test: curl --fail http://localhost:8000/api/healthcheck || exit 1
       interval: 10s
@@ -30,19 +31,29 @@ services:
   db:
     image: postgres:15
     env_file:
-      - .env
+      - ./backend/.env
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
   frontend:
-    profiles: [with_frontend]
     build:
-      context: ../Budgetory_Frontend
-      target: release-image
+      context: frontend
+      dockerfile: docker/Dockerfile
+      target: local-image
+    image: frontend:local-image
     command: yarn start
+    env_file:
+      - ./frontend/.env
     depends_on:
-      - backend
+      backend:
+        condition: service_started
     environment:
       - WATCHPACK_POOLING=true
       - CHOKIDAR_USEPOLLING=true
@@ -50,8 +61,14 @@ services:
     ports:
       - 3000:3000
     stdin_open: true
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules
     volumes:
-      - ../Budgetory_Frontend:/app
       - /app/node_modules
 
 
