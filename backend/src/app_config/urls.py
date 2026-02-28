@@ -3,6 +3,7 @@ import re
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic import RedirectView
 from django.views.static import serve
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -27,7 +28,8 @@ schema_view = get_schema_view(
 router = routers.SimpleRouter()
 
 urlpatterns = [
-    path("api/swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path('', RedirectView.as_view(url='/api/swagger/', permanent=False)),
+    path("api/swagger/<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"),
     path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("api/healthcheck", HealthcheckView.as_view(), name="healthcheck"),

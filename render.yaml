@@ -9,10 +9,6 @@ services:
     buildFilter:
       paths:
         - backend/**
-    routes:
-      - type: redirect
-        source: /
-        destination: /api/swagger
     envVars:
       - key: ENV_FOR_DYNACONF
         value: production
