@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_priority import CategoryPriority
 from categories.models.choices.category_type import CategoryType
 
@@ -22,6 +23,15 @@ def format_typed_priorities(
     return [(priority.value, priority.label) for priority in priorities]
 
 
+@swagger_tag(
+    tag="07. Categories",
+    action_params={
+        "get": {
+            "operation_summary": "Category priorities list",
+            "operation_description": "List of all possible Category priorities.",
+        }
+    },
+)
 class CategoryPriorityView(APIView):
     """
     View returning CategoryPriority choices for TransferCategory.
