@@ -1,17 +1,17 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from app_users.serializers.user_login_serializer import UserLoginSerializer
 
 
-@method_decorator(
-    swagger_auto_schema(
-        tags=["02. Login"],
-        operation_summary="User login",
-        operation_description="Authenticates User. Returns access and refresh tokens.",
-    ),
-    name="post",
+@swagger_tag(
+    tag="02. Login",
+    action_params={
+        "post": {
+            "operation_summary": "User login",
+            "operation_description": "Authenticates User. Returns access and refresh tokens.",
+        }
+    },
 )
 class UserLoginView(TokenObtainPairView):
     serializer_class = UserLoginSerializer

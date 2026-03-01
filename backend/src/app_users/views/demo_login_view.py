@@ -5,6 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from app_users.services.demo_login_service import get_demo_user_token
 
 
@@ -15,6 +16,15 @@ from app_users.services.demo_login_service import get_demo_user_token
         operation_description="Creates and authenticates demo User. Returns access and refresh tokens.",
     ),
     name="post",
+)
+@swagger_tag(
+    tag="02. Login",
+    action_params={
+        "post": {
+            "operation_summary": "Demo User login",
+            "operation_description": "Creates and authenticates demo User. Returns access and refresh tokens.",
+        }
+    },
 )
 class DemoLoginView(APIView):
     """
