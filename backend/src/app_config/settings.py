@@ -174,7 +174,8 @@ SIMPLE_JWT = {
 
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
-    "DEFAULT_AUTO_SCHEMA_CLASS": "app_config.swagger_schemas.CustomAutoSchema",
+    "TAGS_SORTER": "alpha",
+    "OPERATIONS_SORTER": "alpha",
     "SECURITY_DEFINITIONS": {
         "JWT": {
             "type": "apiKey",
