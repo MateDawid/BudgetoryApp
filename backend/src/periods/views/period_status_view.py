@@ -2,9 +2,19 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from periods.models.choices.period_status import PeriodStatus
 
 
+@swagger_tag(
+    tag="04. Periods",
+    action_params={
+        "get": {
+            "operation_summary": "Period Statuses list",
+            "operation_description": "List of all possible Period statuses.",
+        },
+    },
+)
 class PeriodStatusView(APIView):
     """
     View returning PeriodStatus choices for Period.

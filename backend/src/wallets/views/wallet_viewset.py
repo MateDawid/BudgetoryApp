@@ -82,15 +82,15 @@ def get_wallet_deposits_count() -> Func:
         },
         "retrieve": {
             "operation_summary": "Wallet details",
-            "operation_description": "Details of single Wallet that User has access to.",
+            "operation_description": "Details of single Wallet.",
         },
         "partial_update": {
             "operation_summary": "Wallet update",
-            "operation_description": "Updates single Wallet that User has access to.",
+            "operation_description": "Updates single Wallet.",
         },
         "destroy": {
             "operation_summary": "Wallet delete",
-            "operation_description": "Removes single Wallet that User has access to.",
+            "operation_description": "Removes single Wallet.",
         },
     },
 )
