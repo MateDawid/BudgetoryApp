@@ -1,5 +1,3 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -9,14 +7,6 @@ from app_infrastructure.utils.swagger_tag import swagger_tag
 from app_users.services.demo_login_service import get_demo_user_token
 
 
-@method_decorator(
-    swagger_auto_schema(
-        tags=["02. Login"],
-        operation_summary="Demo User login",
-        operation_description="Creates and authenticates demo User. Returns access and refresh tokens.",
-    ),
-    name="post",
-)
 @swagger_tag(
     tag="02. Login",
     action_params={
