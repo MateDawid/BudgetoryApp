@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -6,6 +8,14 @@ from rest_framework.views import APIView
 from app_users.services.demo_login_service import get_demo_user_token
 
 
+@method_decorator(
+    swagger_auto_schema(
+        tags=["02. Login"],
+        operation_summary="Demo User login",
+        operation_description="Creates and authenticates demo User. Returns access and refresh tokens.",
+    ),
+    name="post",
+)
 class DemoLoginView(APIView):
     """
     View for creating demo User and returning its credentials.

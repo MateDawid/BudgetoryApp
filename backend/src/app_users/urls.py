@@ -1,7 +1,7 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenRefreshView
 
 from app_users.views.demo_login_view import DemoLoginView
+from app_users.views.refresh_token_view import TokenRefreshView
 from app_users.views.superuser_register_view import SuperuserRegisterView
 from app_users.views.user_login_view import UserLoginView
 from app_users.views.user_register_view import UserRegisterView
