@@ -5,11 +5,37 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from entities.filtersets.entity_filterset import EntityFilterSet
 from entities.models.entity_model import Entity
 from entities.serializers.entity_serializer import EntitySerializer
 
 
+@swagger_tag(
+    tag="06. Entities",
+    action_params={
+        "list": {
+            "operation_summary": "Entities list",
+            "operation_description": "List of all Wallet Entities.",
+        },
+        "create": {
+            "operation_summary": "Create Entity",
+            "operation_description": "Creates and returns new Entity instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Entity details",
+            "operation_description": "Details of single Entity.",
+        },
+        "partial_update": {
+            "operation_summary": "Entity update",
+            "operation_description": "Updates single Entity.",
+        },
+        "destroy": {
+            "operation_summary": "Entity delete",
+            "operation_description": "Removes single Entity.",
+        },
+    },
+)
 class EntityViewSet(ModelViewSet):
     """View for managing Entities."""
 

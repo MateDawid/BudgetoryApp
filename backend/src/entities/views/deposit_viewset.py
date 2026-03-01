@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_type import CategoryType
 from entities.filtersets.deposit_filterset import DepositFilterSet
 from entities.models.deposit_model import Deposit
@@ -102,6 +103,31 @@ def get_wallet_percentage() -> Case:
     )
 
 
+@swagger_tag(
+    tag="05. Deposits",
+    action_params={
+        "list": {
+            "operation_summary": "Deposits list",
+            "operation_description": "List of all Wallet Deposits.",
+        },
+        "create": {
+            "operation_summary": "Create Deposit",
+            "operation_description": "Creates and returns new Deposit instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Deposit details",
+            "operation_description": "Details of single Deposit.",
+        },
+        "partial_update": {
+            "operation_summary": "Deposit update",
+            "operation_description": "Updates single Deposit.",
+        },
+        "destroy": {
+            "operation_summary": "Deposit delete",
+            "operation_description": "Removes single Deposit.",
+        },
+    },
+)
 class DepositViewSet(ModelViewSet):
     """View for managing Deposits."""
 
