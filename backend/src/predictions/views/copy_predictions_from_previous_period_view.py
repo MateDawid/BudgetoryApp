@@ -9,12 +9,23 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from periods.models import Period
 from predictions.models import ExpensePrediction
 
 logger = logging.getLogger("default")
 
 
+@swagger_tag(
+    tag="08. Expense Predictions",
+    action_params={
+        "post": {
+            "operation_summary": "Copy Expense Predictions from previous period",
+            "operation_description": "View to copy Expense Predictions from previous Period to given one if no "
+            "Expense Predictions created already.",
+        }
+    },
+)
 class CopyPredictionsFromPreviousPeriodAPIView(APIView):
     """
     View for copying predictions from previous period.
