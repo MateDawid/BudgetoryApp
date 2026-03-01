@@ -7,6 +7,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_type import CategoryType
 from entities.models import Deposit
 from transfers.models import Transfer
@@ -68,6 +69,31 @@ def get_wallet_deposits_count() -> Func:
     )
 
 
+@swagger_tag(
+    tag="03. Wallets",
+    action_params={
+        "list": {
+            "operation_summary": "Wallets list",
+            "operation_description": "List of all Wallets that User has access to.",
+        },
+        "create": {
+            "operation_summary": "Create Wallet",
+            "operation_description": "Creates and returns new Wallet instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Wallet details",
+            "operation_description": "Details of single Wallet that User has access to.",
+        },
+        "partial_update": {
+            "operation_summary": "Wallet update",
+            "operation_description": "Updates single Wallet that User has access to.",
+        },
+        "destroy": {
+            "operation_summary": "Wallet delete",
+            "operation_description": "Removes single Wallet that User has access to.",
+        },
+    },
+)
 class WalletViewSet(ModelViewSet):
     """View for manage Wallets."""
 
