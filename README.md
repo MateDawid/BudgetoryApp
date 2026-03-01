@@ -14,6 +14,14 @@ FullStack personal finance management application consisting of a Django REST Fr
 
 ![app-flow.gif](docs/media/app-flow.gif)
 
+## 🌐 Live Demo
+
+| | Link |
+|:--|:--|
+| **Application** | [budgetory.onrender.com](https://budgetory.onrender.com/) |
+| **API** | [budgetory-api.onrender.com](https://budgetory-api.onrender.com/) |
+
+
 ---
 
 ## Tech Stack
