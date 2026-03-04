@@ -1,8 +1,6 @@
 from django.db import transaction
 from django.db.models import QuerySet
 from django_filters import rest_framework as filters
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -36,20 +34,6 @@ class TransferViewSet(ModelViewSet):
             .distinct()
         )
 
-    @swagger_auto_schema(
-        method="delete",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                "objects_ids": openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
-                    description="List of IDs to delete.",
-                )
-            },
-            required=["objects_ids"],
-        ),
-    )
     @action(detail=False, methods=["delete"])
     def bulk_delete(self, request, wallet_pk: str) -> Response:
         """
@@ -67,20 +51,6 @@ class TransferViewSet(ModelViewSet):
             self.serializer_class.Meta.model.objects.filter(period__wallet__id=int(wallet_pk), id__in=ids).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @swagger_auto_schema(
-        method="post",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                "objects_ids": openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
-                    description="List of IDs to copy.",
-                )
-            },
-            required=["objects_ids"],
-        ),
-    )
     @action(detail=False, methods=["post"])
     def copy(self, request, wallet_pk: str) -> Response:
         """
