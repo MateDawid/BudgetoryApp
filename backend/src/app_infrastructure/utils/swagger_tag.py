@@ -19,9 +19,10 @@ def swagger_tag(tag: str, action_params: dict | None = None) -> Callable:
         Callable: Decorator function.
     """
     action_params = action_params or {}
+    actions = set(ACTIONS) | set(action_params.keys())
 
     def decorator(cls: APIView) -> APIView:
-        for action in ACTIONS:
+        for action in actions:
             try:
                 cls = method_decorator(swagger_auto_schema(tags=[tag], **action_params.get(action, {})), name=action)(
                     cls
