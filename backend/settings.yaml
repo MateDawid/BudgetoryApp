@@ -1,7 +1,7 @@
 default:
   ENVIRONMENT:
-    SECRET_KEY: ~
-    SUPERUSER_API_KEY: ~
+    SECRET_KEY: test_secret_key
+    SUPERUSER_API_KEY: superuser_api_key
     DEBUG: 1
     DEBUG_TOOLBAR_ENABLED: 1
     ALLOWED_HOSTS:
@@ -11,15 +11,17 @@ default:
       - http://localhost:3000
   DATABASE:
     ENGINE: django.db.backends.postgresql
-    NAME: ~
-    USER: ~
-    PASSWORD: ~
-    HOST: ~
-    PORT: ~
+    NAME: '@format {env[POSTGRES_DB]}'
+    USER: '@format {env[POSTGRES_USER]}'
+    PASSWORD: '@format {env[POSTGRES_PASSWORD]}'
+    HOST: '@format {env[SQL_HOST]}'
+    PORT: '@format {env[SQL_PORT]}'
 
 production:
   dynaconf_merge: true
   ENVIRONMENT:
+    SECRET_KEY: ~
+    SUPERUSER_API_KEY: ~
     DEBUG: 0
     DEBUG_TOOLBAR_ENABLED: 0
     ALLOWED_HOSTS:

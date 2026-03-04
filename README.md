@@ -183,9 +183,8 @@ Expense transfer management API supporting creation, retrieval, updating, and de
 git clone https://github.com/MateDawid/BudgetoryApp.git
 cd BudgetoryApp
 
-# Prepare .env files for both services
-cp backend/.env_docker backend/.env
-cp frontend/.env_example frontend/.env
+# Prepare .env file
+cp .env_docker .env
 
 # Build services
 docker compose build
@@ -203,8 +202,10 @@ The API will be available at `http://localhost:8000` and the frontend at `http:/
 
 **Backend:**
 ```bash
-cd backend
+# Copy .env_local content and create .env file with it
+cp .env_local .env
 # Create and activate virtual env
+cd backend
 py -3.12 -m venv venv
 .\venv\Scripts\activate
 # Verify Python version - has to be 3.12.?
@@ -216,8 +217,6 @@ python -m pip install poetry
 poetry install
 # Run database service
 docker compose up -d db
-# Copy .env_local content and create .env file with it
-cp .env_local .env
 # Run database migrations
 poetry run python .\src\manage.py migrate
 # Run API service
@@ -228,11 +227,11 @@ poetry run python .\src\manage.py runserver
 ```bash
 # Install yarn
 npm install --global yarn
+# Copy .env_local content and create .env file with it
+cp .env_local .env
 # Install app dependencies
 cd frontend
 yarn install
-# Copy .env_example content and create .env file with it
-cp .env_example .env
 # Run frontend service
 yarn start
 ```
