@@ -9,8 +9,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models import TransferCategory
 from categories.models.choices.category_type import CategoryType
+from charts.views.swagger_setup import CATEGORIES_IN_PERIODS_ACTIONS, CHARTS_TAG
 from charts.views.utils import generate_rgba_value, get_periods
 from transfers.models import Transfer
 
@@ -104,6 +106,7 @@ def get_categories_transfers_sums_in_period(
     return {item["category_id"]: float(item["result"]) for item in period_results}
 
 
+@swagger_tag(tag=CHARTS_TAG, action_params=CATEGORIES_IN_PERIODS_ACTIONS)
 class CategoriesInPeriodsChartAPIView(APIView):
     """
     API view for retrieving category balance results across multiple periods.
