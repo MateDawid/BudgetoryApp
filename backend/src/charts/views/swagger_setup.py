@@ -130,7 +130,7 @@ DEPOSITS_IN_PERIODS_ACTIONS = {
 TOP_ENTITIES_IN_PERIOD_ACTIONS = {
     "get": {
         "operation_summary": "Top Entities in Period Chart data.",
-        "operation_description": "Chart data about Deposits results in Periods",
+        "operation_description": "Chart data about Entities results in Periods",
         "manual_parameters": [
             openapi.Parameter(
                 "transfer_type",
@@ -163,6 +163,36 @@ TOP_ENTITIES_IN_PERIOD_ACTIONS = {
                 "entities_count",
                 openapi.IN_QUERY,
                 description="Number of Entities included in Chart.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+        ],
+    }
+}
+
+TRANSFERS_IN_PERIOD_ACTIONS = {
+    "get": {
+        "operation_summary": "Transfers in Period Chart data.",
+        "operation_description": "Chart data about Transfers in Periods",
+        "manual_parameters": [
+            openapi.Parameter(
+                "deposit",
+                openapi.IN_QUERY,
+                description="Single Deposit ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "entity",
+                openapi.IN_QUERY,
+                description="Single Entity ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "periods_count",
+                openapi.IN_QUERY,
+                description="Number of Periods included in Chart.",
                 type=openapi.TYPE_STRING,
                 format="int64",
             ),
