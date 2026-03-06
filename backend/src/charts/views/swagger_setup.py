@@ -82,3 +82,47 @@ CATEGORY_RESULTS_AND_PREDICTIONS_IN_PERIODS_ACTIONS = {
         ],
     }
 }
+
+DEPOSITS_IN_PERIODS_ACTIONS = {
+    "get": {
+        "operation_summary": "Deposits in Periods Chart data.",
+        "operation_description": "Chart data about Deposits results in Periods",
+        "manual_parameters": [
+            openapi.Parameter(
+                "display_value",
+                openapi.IN_QUERY,
+                description=(
+                    "Value to be displayed.\n\n"
+                    "**Allowed values:**\n"
+                    "- `1` – INCOME Transfers sum.\n"
+                    "- `2` – EXPENSE Transfers sum.\n"
+                    "- `null` – Difference between INCOME Transfers sum and EXPENSE Transfers sum.\n"
+                ),
+                type=openapi.TYPE_STRING,
+                format="int64",
+                enum=CategoryType.values,
+            ),
+            openapi.Parameter(
+                "period_from",
+                openapi.IN_QUERY,
+                description="Start Period ID for Chart range.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "period_to",
+                openapi.IN_QUERY,
+                description="End Period ID for Chart range.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "deposit",
+                openapi.IN_QUERY,
+                description="Single Deposit ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+        ],
+    }
+}

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_type import CategoryType
 from charts.views.deposits_in_periods_chart_view.services.deposits_balances_service import (
     get_deposits_balance_in_period,
@@ -14,6 +15,7 @@ from charts.views.deposits_in_periods_chart_view.services.deposits_balances_serv
 from charts.views.deposits_in_periods_chart_view.services.deposits_transfers_sums_service import (
     get_deposits_transfers_sums_in_period,
 )
+from charts.views.swagger_setup import CHARTS_TAG, DEPOSITS_IN_PERIODS_ACTIONS
 from charts.views.utils import generate_rgba_value, get_periods
 from entities.models import Deposit
 
@@ -68,6 +70,7 @@ def get_chart_data(
     return series_data
 
 
+@swagger_tag(tag=CHARTS_TAG, action_params=DEPOSITS_IN_PERIODS_ACTIONS)
 class DepositsInPeriodsChartAPIView(APIView):
     """
     API view for retrieving deposit balance results across multiple periods.
