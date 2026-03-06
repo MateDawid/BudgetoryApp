@@ -4,17 +4,10 @@ from rest_framework.response import Response
 
 from app_infrastructure.utils.swagger_tag import swagger_tag
 from app_users.serializers.user_register_serializer import UserRegisterSerializer
+from app_users.views.swagger_setup import REGISTER_TAG, SUPERUSER_REGISTER_ACTIONS
 
 
-@swagger_tag(
-    tag="01. Register",
-    action_params={
-        "post": {
-            "operation_summary": "Register admin User",
-            "operation_description": "Creates a new admin User account.",
-        }
-    },
-)
+@swagger_tag(tag=REGISTER_TAG, action_params=SUPERUSER_REGISTER_ACTIONS)
 class SuperuserRegisterView(generics.CreateAPIView):
     """View to register Superuser."""
 
