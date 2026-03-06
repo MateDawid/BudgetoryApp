@@ -46,3 +46,39 @@ CATEGORIES_IN_PERIODS_ACTIONS = {
         ],
     }
 }
+
+CATEGORY_RESULTS_AND_PREDICTIONS_IN_PERIODS_ACTIONS = {
+    "get": {
+        "operation_summary": "Category results and predictions in Periods Chart data.",
+        "operation_description": "Chart data about Category results and predictions in Periods",
+        "manual_parameters": [
+            openapi.Parameter(
+                "category",
+                openapi.IN_QUERY,
+                description="Category ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "periods_count",
+                openapi.IN_QUERY,
+                description="Number of Periods included in Chart.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "display_value",
+                openapi.IN_QUERY,
+                description=(
+                    "Display value.\n\n"
+                    "**Allowed values:**\n"
+                    "- `1` – Category Transfers sums in Periods\n"
+                    "- `2` – Category Predictions in Periods\n"
+                ),
+                type=openapi.TYPE_STRING,
+                format="int64",
+                enum=[1, 2],
+            ),
+        ],
+    }
+}

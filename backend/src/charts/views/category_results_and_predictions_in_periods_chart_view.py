@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
+from charts.views.swagger_setup import CATEGORY_RESULTS_AND_PREDICTIONS_IN_PERIODS_ACTIONS, CHARTS_TAG
 from periods.models import Period
 from predictions.models import ExpensePrediction
 from transfers.models import Transfer
@@ -65,6 +67,7 @@ def get_period_predictions_for_category(category_id: str) -> Coalesce:
     )
 
 
+@swagger_tag(tag=CHARTS_TAG, action_params=CATEGORY_RESULTS_AND_PREDICTIONS_IN_PERIODS_ACTIONS)
 class CategoryResultsAndPredictionsInPeriodsChartApiView(APIView):
     """
     API view for retrieving data about TransferCategory Transfers sum and Predictions in Periods for chart purposes.
