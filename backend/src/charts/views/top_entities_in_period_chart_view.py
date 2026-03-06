@@ -6,7 +6,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_type import CategoryType
+from charts.views.swagger_setup import CHARTS_TAG, TOP_ENTITIES_IN_PERIOD_ACTIONS
 from entities.models import Entity
 from transfers.models import Transfer
 
@@ -40,6 +42,7 @@ def get_entity_period_transfers_sum(
     )
 
 
+@swagger_tag(tag=CHARTS_TAG, action_params=TOP_ENTITIES_IN_PERIOD_ACTIONS)
 class TopEntitiesInPeriodChartAPIView(APIView):
     """
     API view for retrieving data about Entity Transfers in Periods for chart purposes.

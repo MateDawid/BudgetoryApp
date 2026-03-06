@@ -126,3 +126,46 @@ DEPOSITS_IN_PERIODS_ACTIONS = {
         ],
     }
 }
+
+TOP_ENTITIES_IN_PERIOD_ACTIONS = {
+    "get": {
+        "operation_summary": "Top Entities in Period Chart data.",
+        "operation_description": "Chart data about Deposits results in Periods",
+        "manual_parameters": [
+            openapi.Parameter(
+                "transfer_type",
+                openapi.IN_QUERY,
+                description=(
+                    "Transfer type.\n\n"
+                    "**Allowed values:**\n"
+                    "- `1` – INCOME Transfer Category\n"
+                    "- `2` – EXPENSE Transfer Category\n"
+                ),
+                type=openapi.TYPE_STRING,
+                format="int64",
+                enum=CategoryType.values,
+            ),
+            openapi.Parameter(
+                "period",
+                openapi.IN_QUERY,
+                description="Single Period ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "deposit",
+                openapi.IN_QUERY,
+                description="Single Deposit ID.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+            openapi.Parameter(
+                "entities_count",
+                openapi.IN_QUERY,
+                description="Number of Entities included in Chart.",
+                type=openapi.TYPE_STRING,
+                format="int64",
+            ),
+        ],
+    }
+}
