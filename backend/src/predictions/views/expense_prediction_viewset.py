@@ -19,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from predictions.filtersets.expense_prediction_filterset import ExpensePredictionFilterSet
 from predictions.models.expense_prediction_model import ExpensePrediction
 from predictions.serializers.expense_prediction_serializer import ExpensePredictionSerializer
@@ -127,6 +128,31 @@ def get_previous_funds_left() -> ExpressionWrapper:
     return ExpressionWrapper(F("previous_plan") - F("previous_result"), output_field=DecimalField(decimal_places=2))
 
 
+@swagger_tag(
+    tag="08. Expense Predictions",
+    action_params={
+        "list": {
+            "operation_summary": "Expense Predictions list",
+            "operation_description": "List of all Wallet Expense Predictions.",
+        },
+        "create": {
+            "operation_summary": "Create Expense Prediction",
+            "operation_description": "Creates and returns new Expense Prediction instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Expense Prediction details",
+            "operation_description": "Details of single Expense Prediction.",
+        },
+        "partial_update": {
+            "operation_summary": "Expense Prediction update",
+            "operation_description": "Updates single Expense Prediction.",
+        },
+        "destroy": {
+            "operation_summary": "Expense Prediction delete",
+            "operation_description": "Removes single Expense Prediction.",
+        },
+    },
+)
 class ExpensePredictionViewSet(ModelViewSet):
     """Base view for managing ExpensePredictions."""
 

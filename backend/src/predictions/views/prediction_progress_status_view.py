@@ -4,6 +4,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app_infrastructure.utils.swagger_tag import swagger_tag
+
 
 class PredictionProgressStatus(Enum):
     NOT_USED = 1
@@ -24,6 +26,15 @@ class PredictionProgressStatus(Enum):
         return [{"value": member.value, "label": str(member)} for member in cls]
 
 
+@swagger_tag(
+    tag="08. Expense Predictions",
+    action_params={
+        "get": {
+            "operation_summary": "Expense Predictions progress statuses list",
+            "operation_description": "List of all possible Expense Predictions progress statuses.",
+        }
+    },
+)
 class PredictionProgressStatusView(APIView):
     """
     View returning PredictionProgressStatus choices for ExpensePrediction.

@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.filtersets.transfer_category_filterset import TransferCategoryFilterSet
 from categories.serializers.transfer_category_serializer import TransferCategorySerializer
 from periods.models import Period
@@ -15,6 +16,31 @@ from periods.models.choices.period_status import PeriodStatus
 from predictions.models import ExpensePrediction
 
 
+@swagger_tag(
+    tag="07. Categories",
+    action_params={
+        "list": {
+            "operation_summary": "Categories list",
+            "operation_description": "List of all Wallet Categories.",
+        },
+        "create": {
+            "operation_summary": "Create Category",
+            "operation_description": "Creates and returns new Category instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Category details",
+            "operation_description": "Details of single Category.",
+        },
+        "partial_update": {
+            "operation_summary": "Category update",
+            "operation_description": "Updates single Category.",
+        },
+        "destroy": {
+            "operation_summary": "Category delete",
+            "operation_description": "Removes single Category.",
+        },
+    },
+)
 class TransferCategoryViewSet(ModelViewSet):
     """Base ViewSet for managing TransferCategories."""
 

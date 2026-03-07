@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models import TransferCategory
 from categories.models.choices.category_type import CategoryType
 from entities.models import Deposit
@@ -79,6 +80,31 @@ def prepare_predictions_on_period_activation(wallet_pk: str, period_pk: str) -> 
     ExpensePrediction.objects.bulk_create(zero_predictions)
 
 
+@swagger_tag(
+    tag="04. Periods",
+    action_params={
+        "list": {
+            "operation_summary": "Periods list",
+            "operation_description": "List of all Wallet Periods.",
+        },
+        "create": {
+            "operation_summary": "Create Period",
+            "operation_description": "Creates and returns new Period instance.",
+        },
+        "retrieve": {
+            "operation_summary": "Period details",
+            "operation_description": "Details of single Period.",
+        },
+        "partial_update": {
+            "operation_summary": "Period update",
+            "operation_description": "Updates single Period.",
+        },
+        "destroy": {
+            "operation_summary": "Period delete",
+            "operation_description": "Removes single Period.",
+        },
+    },
+)
 class PeriodViewSet(ModelViewSet):
     """View for manage Periods."""
 

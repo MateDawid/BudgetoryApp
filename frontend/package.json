@@ -24,10 +24,11 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "env-cmd -f ../.env react-scripts start",
+    "build": "env-cmd -f ../.env react-scripts build",
+    "test": "env-cmd -f ../.env react-scripts test",
+    "test:pipeline": "react-scripts test",
+    "eject": "env-cmd -f ../.env react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -60,6 +61,7 @@
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
     "@faker-js/faker": "^9.2.0",
+    "env-cmd": "^11.0.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-react-app": "^7.0.1",
@@ -83,6 +85,7 @@
     "nth-check": ">=2.0.1",
     "minimatch": "3.1.4",
     "rollup": ">=2.80.0",
-    "serialize-javascript": ">=7.0.3"
+    "serialize-javascript": ">=7.0.3",
+    "svgo": ">=2.8.1"
   }
 }

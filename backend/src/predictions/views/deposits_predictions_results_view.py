@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_infrastructure.permissions import UserBelongsToWalletPermission
+from app_infrastructure.utils.swagger_tag import swagger_tag
 from categories.models.choices.category_priority import CategoryPriority
 from categories.models.choices.category_type import CategoryType
 from periods.models import Period
@@ -141,6 +142,16 @@ def get_funds_left_for_expenses() -> ExpressionWrapper:
     return ExpressionWrapper(F("predictions_sum") - F("period_expenses"), output_field=DecimalField(decimal_places=2))
 
 
+@swagger_tag(
+    tag="08. Expense Predictions",
+    action_params={
+        "get": {
+            "operation_summary": "Predictions progress in Period for each Deposit",
+            "operation_description": "List of all Wallet Deposits with data about progress of Expense Predictions "
+            "in given Period.",
+        }
+    },
+)
 class DepositsPredictionsResultsAPIView(APIView):
     """
     View returning Deposits results in indicated Period - predictions, planned expenses and actual expenses.

@@ -15,14 +15,11 @@ services:
       - ./.flake8:/app/.flake8
       - ./test-results:/app/test-results
     environment:
-      - DYNACONF_ENVIRONMENT__SECRET_KEY=test_secret_key
-      - DYNACONF_ENVIRONMENT__SUPERUSER_API_KEY=superuser_api_key
-      - DYNACONF_ENVIRONMENT__DEBUG=0
-      - DYNACONF_DATABASE__NAME=${POSTGRES_DB}
-      - DYNACONF_DATABASE__USER=${POSTGRES_USER}
-      - DYNACONF_DATABASE__PASSWORD=${POSTGRES_PASSWORD}
-      - DYNACONF_DATABASE__HOST=${SQL_HOST}
-      - DYNACONF_DATABASE__PORT=${SQL_PORT}
+      - SQL_HOST=${SQL_HOST}
+      - SQL_PORT=${SQL_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - 8000:8000
     depends_on:
