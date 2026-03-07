@@ -107,6 +107,7 @@ jobs:
       - name: Run Trivy
         uses: aquasecurity/trivy-action@0.34.0
         with:
+          version: v0.69.3
           scan-type: fs
           scan-ref: frontend
           severity: CRITICAL,HIGH
