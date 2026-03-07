@@ -88,7 +88,7 @@ function LandingPage() {
           <Grid size={12}>
             <WalletsSummaryTable wallets={wallets} />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Paper
               elevation={24}
               sx={{
@@ -100,7 +100,7 @@ function LandingPage() {
               <TransfersInPeriodsChart />
             </Paper>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Paper
               elevation={24}
               sx={{
@@ -112,7 +112,7 @@ function LandingPage() {
               <DepositsInPeriodsChart />
             </Paper>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Paper
               elevation={24}
               sx={{
@@ -124,7 +124,7 @@ function LandingPage() {
               <CategoriesInPeriodsChart />
             </Paper>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ sm: 12, md: 6 }}>
             <Paper
               elevation={24}
               sx={{
