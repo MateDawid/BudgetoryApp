@@ -63,4 +63,7 @@ def create_periods(daily_wallet: Wallet, long_term_wallet: Wallet) -> tuple[list
             ]
         )
     )
+    for idx, period in enumerate(all_periods[1:], start=1):
+        period.previous_period = all_periods[idx - 1]
+    Period.objects.bulk_update(all_periods[1:], fields=["previous_period"])
     return all_periods[:periods_count], all_periods[periods_count:]
