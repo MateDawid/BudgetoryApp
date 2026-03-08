@@ -169,7 +169,7 @@ export default function ExpensePredictionsPage() {
       >
         {/* Main header */}
         <Stack
-          direction="row"
+          direction={{ xs: 'column', sm: 'row', md: 'row' }}
           alignItems="center"
           justifyContent="space-between"
           spacing={1}
