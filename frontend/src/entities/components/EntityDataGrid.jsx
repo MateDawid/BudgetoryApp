@@ -18,6 +18,7 @@ import { WalletContext } from '../../app_infrastructure/store/WalletContext';
 import EntityAddModal from './EntityModal/EntityAddModal';
 import EntityEditModal from './EntityModal/EntityEditModal';
 import EntityDeleteModal from './EntityModal/EntityDeleteModal';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 const pageSizeOptions = [10, 50, 100];
 
@@ -31,6 +32,8 @@ export const EntityTypes = {
  */
 const EntityDataGrid = ({ entityType }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   // Contexts
   const { setAlert } = useContext(AlertContext);
   const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
@@ -291,7 +294,14 @@ const EntityDataGrid = ({ entityType }) => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"

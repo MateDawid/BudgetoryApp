@@ -20,6 +20,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { useNavigate } from 'react-router-dom';
 import DataGridFooterWithAdd from '../../app_infrastructure/components/DataGrid/DataGridFooterWithAdd';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 const pageSizeOptions = [10, 50, 100];
 
@@ -28,6 +29,8 @@ const pageSizeOptions = [10, 50, 100];
  */
 const CategoryDataGrid = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   // Contexts
   const { setAlert } = useContext(AlertContext);
   const { contextWalletId, refreshTimestamp } = useContext(WalletContext);
@@ -285,7 +288,14 @@ const CategoryDataGrid = () => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"

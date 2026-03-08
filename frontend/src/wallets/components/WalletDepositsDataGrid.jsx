@@ -12,7 +12,7 @@ import {
 } from '../../app_infrastructure/components/DataGrid/utils/FilterHandlers';
 import getSortFieldMapping from '../../app_infrastructure/components/DataGrid/utils/getSortFieldMapping';
 import StyledGridActionsCellItem from '../../app_infrastructure/components/DataGrid/StyledGridActionsCellItem';
-
+import { useTheme, useMediaQuery } from '@mui/material';
 const pageSizeOptions = [10, 50, 100];
 
 /**
@@ -20,6 +20,8 @@ const pageSizeOptions = [10, 50, 100];
  */
 const WalletDepositsDataGrid = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const { contextWalletId, contextWalletCurrency } = useContext(WalletContext);
   const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/wallets/${contextWalletId}/deposits/?fields=id,name,description,balance,wallet_percentage`;
   const [rows, setRows] = useState([]);
@@ -188,7 +190,14 @@ const WalletDepositsDataGrid = () => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"
