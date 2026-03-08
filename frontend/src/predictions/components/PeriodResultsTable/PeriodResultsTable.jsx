@@ -54,6 +54,7 @@ export default function PeriodResultsTable({
       </Stack>
     );
   }
+  console.log(periodResults)
 
   return (
     <TableContainer component={Paper}>
@@ -63,7 +64,7 @@ export default function PeriodResultsTable({
         </TableHead>
         <TableBody>
           {periodResults.map((row) => (
-            <PeriodResultsRow key={row.user_username} row={row} />
+            <PeriodResultsRow key={row.deposit_name} row={row} />
           ))}
         </TableBody>
       </Table>
