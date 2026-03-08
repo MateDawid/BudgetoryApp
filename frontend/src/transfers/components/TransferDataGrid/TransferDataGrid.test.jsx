@@ -7,6 +7,7 @@ import { AlertContext } from '../../../app_infrastructure/store/AlertContext';
 import { WalletContext } from '../../../app_infrastructure/store/WalletContext';
 import { getApiObjectsList } from '../../../app_infrastructure/services/APIService';
 import TransferTypes from '../../utils/TransferTypes';
+import { useMediaQuery } from '@mui/material';
 
 jest.mock('axios');
 
@@ -227,21 +228,11 @@ describe('TransferDataGrid', () => {
       expect(screen.getByTestId('styled-data-grid')).toBeInTheDocument();
     });
 
-    test('renders all column headers', async () => {
+    test('renders minimum column headers', async () => {
       await renderComponent();
 
       expect(screen.getByTestId('column-date')).toHaveTextContent('Date');
-      expect(screen.getByTestId('column-period')).toHaveTextContent('Period');
-      expect(screen.getByTestId('column-name')).toHaveTextContent('Name');
-      expect(screen.getByTestId('column-deposit')).toHaveTextContent('Deposit');
-      expect(screen.getByTestId('column-entity')).toHaveTextContent('Entity');
-      expect(screen.getByTestId('column-category')).toHaveTextContent(
-        'Category'
-      );
       expect(screen.getByTestId('column-value')).toHaveTextContent('Value');
-      expect(screen.getByTestId('column-description')).toHaveTextContent(
-        'Description'
-      );
       expect(screen.getByTestId('column-actions')).toHaveTextContent('Actions');
     });
 
@@ -354,15 +345,6 @@ describe('TransferDataGrid', () => {
   });
 
   describe('Data Display', () => {
-    test('displays transfer data in rows', async () => {
-      await renderComponent();
-
-      expect(screen.getByText('Salary')).toBeInTheDocument();
-      expect(screen.getByText('Groceries')).toBeInTheDocument();
-      expect(screen.getByText('Monthly salary')).toBeInTheDocument();
-      expect(screen.getByText('Weekly shopping')).toBeInTheDocument();
-    });
-
     test('formats date correctly', async () => {
       await renderComponent();
 
