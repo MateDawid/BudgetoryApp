@@ -54,7 +54,6 @@ export default function PeriodResultsTable({
       </Stack>
     );
   }
-  console.log(periodResults)
 
   return (
     <TableContainer component={Paper}>
