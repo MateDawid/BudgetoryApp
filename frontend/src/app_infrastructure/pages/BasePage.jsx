@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar';
 import { getAccessToken } from '../../app_users/services/LoginService';
 import { Alert, Snackbar, Stack } from '@mui/material';
 import Leftbar from '../components/Leftbar';

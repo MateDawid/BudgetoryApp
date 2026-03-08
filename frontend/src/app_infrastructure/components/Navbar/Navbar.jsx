@@ -2,12 +2,10 @@ import { AppBar } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { removeTokens } from '../../app_users/services/LoginService';
-import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { useContext } from 'react';
 import React from 'react';
-import { AlertContext } from '../store/AlertContext';
+import NavbarMenu from './NavbarMenu';
+import { useLogout } from './useLogout';
 
 const StyledToolbar = styled(Toolbar)({
   display: 'flex',
@@ -18,16 +16,13 @@ const StyledToolbar = styled(Toolbar)({
  * Navbar component to display navigation bar on top of the page.
  */
 const Navbar = () => {
-  const navigate = useNavigate();
-  const { setAlert } = useContext(AlertContext);
+  const logout = useLogout();
 
   /**
    * Handles User logout.
    */
   const handleLogout = () => {
-    removeTokens();
-    setAlert(null);
-    navigate('/login');
+    logout();
   };
 
   return (
@@ -47,9 +42,14 @@ const Navbar = () => {
         >
           BUDGETORY
         </Typography>
-        <Button color="inherit" onClick={handleLogout}>
+        <Button
+          color="inherit"
+          onClick={handleLogout}
+          sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}
+        >
           Logout
         </Button>
+        <NavbarMenu sx={{ display: { sm: 'block', md: 'none' } }} />
       </StyledToolbar>
     </AppBar>
   );
