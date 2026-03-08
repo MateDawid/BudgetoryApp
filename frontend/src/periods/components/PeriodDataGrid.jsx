@@ -18,6 +18,7 @@ import DataGridFooterWithAdd from '../../app_infrastructure/components/DataGrid/
 import PeriodAddModal from './PeriodModal/PeriodAddModal';
 import PeriodEditModal from './PeriodModal/PeriodEditModal';
 import PeriodDeleteModal from './PeriodModal/PeriodDeleteModal';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 const STATUS_OPTIONS = [
   { value: 1, label: '📝 Draft' },
@@ -31,6 +32,8 @@ const pageSizeOptions = [10, 50, 100];
  * DataTable component for displaying DataGrid with data fetched from API.
  */
 const PeriodDataGrid = () => {
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const navigate = useNavigate();
   // Contexts
   const { setAlert } = useContext(AlertContext);
@@ -318,7 +321,14 @@ const PeriodDataGrid = () => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"

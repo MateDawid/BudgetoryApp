@@ -1,16 +1,10 @@
+// src/components/Leftbar.tsx
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import SellIcon from '@mui/icons-material/Sell';
-import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
-import LocalGroceryStoreRoundedIcon from '@mui/icons-material/LocalGroceryStoreRounded';
-import PaymentIcon from '@mui/icons-material/Payment';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import LeftbarItem from './LeftbarItem';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import { ListSubheader, styled } from '@mui/material';
+import LeftbarItem from './LeftbarItem';
+import { navConfig } from './navConfig';
 
 const StyledListSubheader = styled(ListSubheader)({
   color: '#FFFFFF',
@@ -38,50 +32,19 @@ const Leftbar = () => {
         sx={{ backgroundColor: '#252525', overflow: 'auto' }}
       >
         <List>
-          <StyledListSubheader>Wallets</StyledListSubheader>
-          <LeftbarItem
-            url="/wallets"
-            displayText="Wallets"
-            icon={<AccountBalanceWalletRoundedIcon />}
-          />
-          <LeftbarItem
-            url="/periods"
-            displayText="Periods"
-            icon={<CalendarMonthIcon />}
-          />
-          <StyledListSubheader>Entities</StyledListSubheader>
-          <LeftbarItem
-            url="/deposits"
-            displayText="Deposits"
-            icon={<AccountBalanceIcon />}
-          />
-          <LeftbarItem
-            url="/entities"
-            displayText="Entities"
-            icon={<LocalGroceryStoreRoundedIcon />}
-          />
-          <StyledListSubheader>Planning</StyledListSubheader>
-          <LeftbarItem
-            url="/categories"
-            displayText="Categories"
-            icon={<SellIcon />}
-          />
-          <LeftbarItem
-            url="/predictions"
-            displayText="Predictions"
-            icon={<BarChartIcon />}
-          />
-          <StyledListSubheader>Transfers</StyledListSubheader>
-          <LeftbarItem
-            url="/incomes"
-            displayText="Incomes"
-            icon={<PaymentIcon />}
-          />
-          <LeftbarItem
-            url="/expenses"
-            displayText="Expenses"
-            icon={<ReceiptIcon />}
-          />
+          {navConfig.map((section) => (
+            <React.Fragment key={section.title}>
+              <StyledListSubheader>{section.title}</StyledListSubheader>
+              {section.items.map((item) => (
+                <LeftbarItem
+                  key={item.url}
+                  url={item.url}
+                  displayText={item.label}
+                  icon={item.icon}
+                />
+              ))}
+            </React.Fragment>
+          ))}
         </List>
       </Box>
     </Box>

@@ -19,6 +19,7 @@ import TransferEditModal from '../TransferModal/TransferEditModal';
 import TransferDeleteModal from '../TransferModal/TransferDeleteModal';
 import renderHyperlink from '../../../app_infrastructure/components/DataGrid/utils/renderHyperlink';
 import { useNavigate } from 'react-router-dom';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 const pageSizeOptions = [10, 50, 100];
 
@@ -29,6 +30,8 @@ const pageSizeOptions = [10, 50, 100];
  */
 const TransferDataGrid = ({ transferType }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   // Contexts
   const { setAlert } = useContext(AlertContext);
   const { contextWalletId, contextWalletCurrency, refreshTimestamp } =
@@ -373,7 +376,15 @@ const TransferDataGrid = ({ transferType }) => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[6],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"
