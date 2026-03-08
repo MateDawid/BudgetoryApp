@@ -18,6 +18,7 @@ import WalletAddModal from './WalletModal/WalletAddModal';
 import WalletEditModal from './WalletModal/WalletEditModal';
 import WalletDeleteModal from './WalletModal/WalletDeleteModal';
 import { WalletContext } from '../../app_infrastructure/store/WalletContext';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 const pageSizeOptions = [10, 50, 100];
 
@@ -26,6 +27,9 @@ const pageSizeOptions = [10, 50, 100];
  */
 const WalletDataGrid = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+
   // Contexts
   const { setAlert } = useContext(AlertContext);
   const { refreshTimestamp } = useContext(WalletContext);
@@ -266,7 +270,14 @@ const WalletDataGrid = () => {
       >
         <StyledDataGrid
           rows={rows}
-          columns={extendedColumns}
+          columns={
+            isMdUp
+              ? extendedColumns
+              : [
+                  extendedColumns[0],
+                  extendedColumns[extendedColumns.length - 1],
+                ]
+          }
           loading={loading}
           rowCount={rowCount}
           paginationMode="server"
